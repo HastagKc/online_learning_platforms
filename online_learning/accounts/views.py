@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import CustomUserModel
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
 
 import re
 
@@ -24,20 +26,16 @@ def validate_registration(username, email, password, con_password):
     '''
     try:
         if password != con_password:
-            print("Passwords do not match.")
-            return False
+            return "Passwords do not match."
 
         if not is_complex_password(con_password):
-            print("Password must be at least 8 characters and include uppercase, lowercase, digit, and special character.")
-            return False
+            return "Password must be at least 8 characters and include uppercase, lowercase, digit, and special character."
 
         if CustomUserModel.objects.filter(username=username).exists():
-            print("Username already exists.")
-            return False
+            return "Username already exists."
 
         if CustomUserModel.objects.filter(email=email).exists():
-            print("Email already exists.")
-            return False
+            return "Email already exists."
 
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -92,10 +90,13 @@ def teacher_registration(request):
         password = data['password']
         con_password = data['con_password']
 
-        is_valid = validate_registration(
+        message_text = validate_registration(
             username=username, email=email, con_password=con_password, password=password
         )
-        if is_valid:
+
+        messages.error(request, message_text)
+
+        if not message_text:
             # Create user if all checks pass
             user = CustomUserModel.objects.create_user(
                 first_name=firstname,
@@ -109,3 +110,33 @@ def teacher_registration(request):
             print("User created successfully.")
 
     return render(request, 'accounts/teacher_registration.html', {'user_type': user_type})
+
+
+def log_in(request):
+    '''
+    This function is responsible for login
+    '''
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if not CustomUserModel.objects.filter(username=username).exists():
+            messages.error(request, 'User is not register')
+            return redirect('log_in')
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+
+        else:
+            messages.info(request, 'Invalid keyword')
+            return redirect('log_in')
+
+    return render(request, 'accounts/login.html')
+
+
+def log_out(request):
+    logout(request)
+    return redirect('log_in')
