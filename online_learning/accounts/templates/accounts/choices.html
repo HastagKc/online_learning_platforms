@@ -6,11 +6,16 @@
         background-color: grey;
     }
 
+    .main_container {
+        width: 100%;
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .choices_box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
         background-color: rgba(42, 54, 160, 0.466);
         padding: 20px;
         width: 450px;
@@ -74,6 +79,22 @@
         color: #fff;
         cursor: pointer;
     }
+
+    .cross_icon {
+        position: absolute;
+        top: 6%;
+        right: 3%;
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.836);
+    }
+
+    .label_icon {
+        margin-right: 5px;
+    }
+
+    .label {
+        margin-right: 5px;
+    }
 </style>
 
 {% endblock css %}
@@ -82,7 +103,7 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-6">
+        <div class="col-6  main_container">
             <div class="choices_box">
                 <h2 class="option__heading">Please select an option:</h2>
 
@@ -91,20 +112,26 @@
                     <div class="form__section">
                         <div>
                             <!-- Checkbox for teacher -->
+                            <label for="teacher" class="label"> <i
+                                    class="fa-solid fa-graduation-cap label_icon"></i>Teacher</label>
                             <input type="checkbox" id="teacher" name="teacher" value="teacher">
-                            <label for="teacher">Teacher</label>
                         </div>
 
 
                         <div style="margin-left: 20px;">
                             <!-- Checkbox for student -->
-                            <input type="checkbox" id="student" name="student" value="student">
-                            <label for="student">Student</label><br>
+                            <label for="student" class="label"><i class="fa-solid fa-user label_icon"></i>
+                                Student</label>
+                            <input type="checkbox" id="student" name="student" value="student"><br>
                         </div>
                     </div>
                     <!-- Submit button -->
                     <input type="submit" value="Go to next page" class="submit_btn">
                 </form>
+
+
+                <a href="{% url 'home' %}"><i class="fa-regular fa-circle-xmark cross_icon"></i> </i></a>
+
             </div>
         </div>
     </div>

@@ -5,9 +5,11 @@
 
 {% block content %}
 <form method="POST">
-    <h2>Registration For Student</h2>
-
-
+    <h2>Registration For {{ user_type }}</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="submit" name="" id="" value="Submit">
+    </form>
     <a href="{% url 'choices' %}">Go Back</a>
 
 </form>
