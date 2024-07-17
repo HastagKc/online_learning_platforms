@@ -51,11 +51,11 @@ def choices(request):
     if request.method == 'POST':
         if 'teacher' in request.POST:
             request.session['user_type'] = 'teacher'
-            return redirect('teacher_registration')
+            return redirect('registration')
 
         elif 'student' in request.POST:
             request.session['user_type'] = 'student'
-            return redirect('student_registration')
+            return redirect('registration')
 
         else:
             return redirect('choices')
@@ -63,15 +63,7 @@ def choices(request):
     return render(request, 'accounts/choices.html')
 
 
-def student_registration(request):
-    '''
-        This view is responsible for registering student
-    '''
-
-    return render(request, 'accounts/student_registration.html')
-
-
-def teacher_registration(request):
+def registration(request):
     user_type = request.session.get('user_type')
     print(user_type, type(user_type))
 
@@ -107,9 +99,10 @@ def teacher_registration(request):
                 password=con_password,
                 is_teacher=is_teacher,
             )
-            print("User created successfully.")
 
-    return render(request, 'accounts/teacher_registration.html', {'user_type': user_type})
+            return redirect('log_in')
+
+    return render(request, 'accounts/registration.html', {'user_type': user_type})
 
 
 def log_in(request):
