@@ -1,3 +1,4 @@
+from .models import Video, Course
 from django import forms
 from .models import Category, Course, PDF, Video, Quiz, Question, Answer
 
@@ -25,6 +26,22 @@ class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ['course', 'video_file', 'title']
+
+    from django import forms
+
+
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['course', 'video_file', 'title']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(VideoForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['course'].queryset = Course.objects.filter(
+                created_by=user.username
+            )
 
 
 class QuizForm(forms.ModelForm):
