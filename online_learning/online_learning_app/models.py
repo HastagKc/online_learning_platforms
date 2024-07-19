@@ -3,6 +3,7 @@ from django.db import models
 
 class Category(models.Model):
     cate_title = models.CharField(max_length=200)
+    created_by = models.CharField(max_length=200,default="")
 
     def __str__(self):
         return self.cate_title

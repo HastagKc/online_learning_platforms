@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 <!-- load static -->
+
 {% load static %}
 
 <!-- css -->
@@ -8,7 +9,9 @@
 {% block css %}
   <style>
     .row {
-      background-color: aqua;
+      /*
+                                                                                                                                  background-color: aqua;
+                                                                                                                                  */
       margin: 20px 10px;
       border-radius: 10px;
       padding: 20px 0px;
@@ -19,6 +22,35 @@
 <!-- content -->
 
 {% block content %}
+  <!-- Course Content Details -->
+
+  <div class="contaner-fluid">
+    <div class="row">
+      {% for course in course %}
+        <div class="col">
+          <div class="card mb-4" style="width:100%">
+            <div class="row g-0">
+              <div class="col-4">
+                <img src="{{ course.course_image.url }}" class="img-fluid rounded-start" alt="No image" style="width: 80%;height: 80%;" />
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ course.course_title }}</h5>
+                  <p class="card-text">{{ course.course_desc }}</p>
+                  <p class="card-text">Category: {{ course.category }}</p>
+                  <p class="card-text">Price: {{ course.price }}</p>
+
+                  <button class="btn btn-primary">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- For Additional Content -->
   <div class="container-fluid">
     <!-- video -->
     <div class="row">
@@ -37,36 +69,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>
-                <button class="btn btn-primary">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>
-                <button class="btn btn-primary">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>
-                <button class="btn btn-primary">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </td>
-            </tr>
+            {% for video in course_videos %}
+              <tr>
+                <th scope="row">{{ video.id }}</th>
+                <td>{{ video.course }}</td>
+                <td>{{ video.title }}</td>
+                <td>{{ video.video_file }}</td>
+                <td>
+                  <button class="btn btn-primary">Edit</button>
+                  <button class="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

@@ -9,6 +9,11 @@
       padding: 5px 0px 0px;
     }
     
+    .side__bar {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 5px;
+      padding: 20px;
+    }
     .top_dashboard {
       min-height: 70vh;
       /* background-color: rebeccapurple; */
@@ -112,19 +117,46 @@
       font-size: 18px;
       font-weight: 700;
     }
+    
+    .add_course_div {
+      background-color: aqua;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 0px 5px;
+    }
+    
+    /* categories */
+    .card_col {
+      width: 100%;
+      padding: 10px;
+    }
+    .card_col:hover {
+      background-color: whitesmoke;
+    }
+    
+    .card__head {
+      font-size: 48px;
+      font-weight: 800;
+      background-color: whitesmoke;
+      width: 100%;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   </style>
 {% endblock %}
 
 {% block content %}
   <div class="container-fluid mt-4">
     <div class="row">
-      <div class="col-2 bg-primary pb-2">
+      <div class="col-2 bg-primary side__bar">
         <h2>Online Learning</h2>
         <div class="tab">
           <p class="content__links" data-tab="dashboard">Dashboard</p>
           <p class="content__links" data-tab="profile">Profile</p>
-          <p class="content__links" data-tab="courses">Add Courses</p>
           <p class="content__links" data-tab="categories">Categories</p>
+          <p class="content__links" data-tab="courses">Add Courses</p>
         </div>
         <p>
           <a style="color: black; text-decoration: none; " href="{% url 'home' %}">Go Back</a>
@@ -171,36 +203,43 @@
             <div class="col">
               <h4>Top Courses</h4>
               <div class="row mt-4">
-                <div class="col-4">
-                  <div class="card" style="width: 100%;">
-                    <img src="{% static 'images/java.png' %}" class="card-img-top" alt="no image" style="height: 200px; object-fit: contain;" />
-                    <div class="card-body">
-                      <h5 class="card-title">Java</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">See More</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="card" style="width: 100%;">
-                    <img src="{% static 'images/java.png' %}" class="card-img-top" alt="no image" style="height: 200px; object-fit: contain;" />
-                    <div class="card-body">
-                      <h5 class="card-title">Java</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">See More</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="card" style="width: 100%;">
-                    <img src="{% static 'images/java.png' %}" class="card-img-top" alt="no image" style="height: 200px; object-fit: contain;" />
-                    <div class="card-body">
-                      <h5 class="card-title">Java</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">See More</a>
-                    </div>
-                  </div>
-                </div>
+                {% if user.is_authenticated %}
+                  {% for course in all_course %}
+                    {% if request.user.username == course.created_by %}
+                      <div class="col-6">
+                        <div class="card mb-3" style="width:100%">
+                          <div class="row g-0">
+                            <div class="col-md-4">
+                              <img src="{{ course.course_image.url }}" class="img-fluid rounded-start" alt="Course Image" style="height: 180px;" />
+                              <div class="row text-center mt-2">
+                                <div class="col">
+                                  <a href="#" class="btn btn-primary">Update</a>
+                                </div>
+                              </div>
+                              <div class="row text-center mt-2">
+                                <div class="col">
+                                  <a href="#" class="btn btn-danger">Delete</a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-8">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ course.course_title }}</h5>
+                                <p class="card-text">{{ course.course_desc }}</p>
+                                <p class="card-text">{{ course.category }}</p>
+                                <p class="card-text">Created By: {{ course.created_by }}</p>
+                                <p class="card-text">{{ course.price }}</p>
+                                <a class="btn btn-primary" href="{% url 'course_details' course.id %}" style="text-decoration: none; width: 100%;">See Course Details</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <p>Please log in to see your courses.</p>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -217,13 +256,40 @@
             Natural Language Processing (NLP): NLP focuses on the interaction between computers and humans through natural language. It enables machines to understand, interpret, and generate human language, facilitating tasks like language translation, sentiment analysis, and chatbots.</p>
         </div>
 
-        <!-- tab 3 -->
+        <!-- tab 3 Categories -->
+        <div id="categories" class="content">
+          <h1>Categories</h1>
+          <a style="text-decoration: none;" href="{% url 'add_category' %}" class="btn btn-primary">Add Category</a>
+
+          <div class="row" style="padding: 10px;">
+            {% for i in all_categories %}
+              {% if request.user.username == i.created_by %}
+                <div class="col-3">
+                  <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                      <div class="card__head">{{ i.cate_title|slice:':1' }}</div>
+
+                      <p style="text-align: center;font-size: 24px; font-weight: bolder;" class="card-text">{{ i.cate_title }}</p>
+                      <center>
+                        <button class="btn btn-primary">Update</button>
+                        <button class="btn btn-danger">Delete</button>
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- tab 4 Course -->
         <div id="courses" class="content">
-          <h1>Add Course</h1>
           <div class="row">
             <div class="col">
-              <a style="text-decoration: none;" href="{% url 'add_category' %}" class="btn btn-primary">Add Categories</a>
-              <a style="text-decoration: none;" href="{% url 'add_course' %}" class="btn btn-primary">Add Course</a>
+              <div class="add_course_div">
+                <h3>Add Course</h3>
+                <a style="text-decoration: none;" href="{% url 'add_course' %}" class="btn btn-primary">Add Course</a>
+              </div>
             </div>
           </div>
 
@@ -254,7 +320,7 @@
                             <p class="card-text">{{ course.category }}</p>
                             <p class="card-text">Created By: {{ course.created_by }}</p>
                             <p class="card-text">{{ course.price }}</p>
-                            <a class="btn btn-primary" href="{% url 'course_details' %}" style="text-decoration: none; width: 100%;">See Course Details</a>
+                            <a class="btn btn-primary" href="{% url 'course_details' course.id %}" style="text-decoration: none; width: 100%;">See Course Details</a>
                           </div>
                         </div>
                       </div>
@@ -266,16 +332,6 @@
               <p>Please log in to see your courses.</p>
             {% endif %}
           </div>
-        </div>
-        <!-- categories -->
-        <div id="categories" class="content">
-          <h1>Tab 4</h1>
-
-          <p>this tab 4 content
-
-            Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans. It encompasses a broad range of technologies and applications, aiming to mimic cognitive functions such as problem-solving, learning, reasoning, perception, language understanding, and decision-making.
-
-            Machine Learning: A subset of AI that enables systems to learn and improve from experience without being explicitly programmed. It involves algorithms that identify patterns in data and make decisions based on those patterns.</p>
         </div>
       </div>
     </div>

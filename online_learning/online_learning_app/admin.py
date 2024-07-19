@@ -4,7 +4,7 @@ from .models import Category, Course, PDF, Video, Quiz, Question, Answer
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['cate_title']
+    list_display = ['cate_title', 'created_by']
 
 
 @admin.register(Course)
