@@ -60,16 +60,13 @@ def update_category(request, id):
     return render(request, 'online_learning_app/category/add_category.html', context=context)
 
 
-@login_required(login_url='/accounts/log_in/')
 def delete_category(request, id):
+    category = get_object_or_404(Category, pk=id)
     if request.method == 'POST':
-        category = get_object_or_404(Category, pk=id)
         category.delete()
         return redirect('tech_dashboard')
+    return render(request, 'online_learning_app/dashboard/teacher_dashboard.html', {'category': category})
 
-
-def confirm_delete(request, id):
-    pass
 
 # ------------------------------------ Course -----------------------------------------------
 
