@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CourseForm, CategoryForm, VideoForm
 from .models import Course, Category, Video
 
@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'online_learning_app/index.html')
+
+# ----------------------------- Teacher Dashboard --------------------------------------------
 
 
 @login_required(login_url='/accounts/log_in/')
@@ -20,6 +22,7 @@ def teacher_dashboard(request):
     return render(request, 'online_learning_app/dashboard/teacher_dashboard.html', context=context)
 
 
+# ------------------------- Category ------------------------------------------
 @login_required(login_url='/accounts/log_in/')
 def add_category(request):
     if request.method == 'POST':
@@ -35,11 +38,56 @@ def add_category(request):
     context = {
         'cate_form': form,
     }
-    return render(request, 'online_learning_app/course/add_category.html', context=context)
+    return render(request, 'online_learning_app/category/add_category.html', context=context)
 
 
-def update_category():
+@login_required(login_url='/accounts/log_in/')
+def update_category(request, id):
+    category = get_object_or_404(Category, id=id)
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('tech_dashboard')
+
+    else:
+        form = CategoryForm(instance=category)
+
+        context = {
+            'cate_form': form,
+        }
+    return render(request, 'online_learning_app/category/add_category.html', context=context)
+
+
+@login_required(login_url='/accounts/log_in/')
+def delete_category(request, id):
+    if request.method == 'POST':
+        category = get_object_or_404(Category, pk=id)
+        category.delete()
+        return redirect('tech_dashboard')
+
+
+def confirm_delete(request, id):
     pass
+
+# ------------------------------------ Course -----------------------------------------------
+
+
+@login_required(login_url='/accounts/log_in/')
+def course_detail(request, id):
+    '''
+    this view will responsible to addtional information and content management about 
+    course
+    '''
+    course = Course.objects.filter(id=id)
+    course_videos = Video.objects.filter(course=id)
+
+    context = {
+        'course': course,
+        'course_videos': course_videos,
+    }
+    return render(request, 'online_learning_app/course/course_details.html', context=context)
 
 
 @login_required(login_url='/accounts/log_in/')
@@ -61,22 +109,7 @@ def add_course(request):
     return render(request, 'online_learning_app/course/add_course.html', context=context)
 
 
-@login_required(login_url='/accounts/log_in/')
-def course_detail(request, id):
-    '''
-    this view will responsible to addtional information and content management about 
-    course
-    '''
-    course = Course.objects.filter(id=id)
-    course_videos = Video.objects.filter(course=id)
-
-    context = {
-        'course': course,
-        'course_videos': course_videos,
-    }
-    return render(request, 'online_learning_app/course/course_details.html', context=context)
-
-
+# ---------------------------------------- video -----------------------------------------------
 @login_required
 def add_video(request):
     if request.method == 'POST':
