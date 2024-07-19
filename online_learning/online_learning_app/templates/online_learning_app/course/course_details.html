@@ -10,8 +10,8 @@
   <style>
     .row {
       /*
-                                                                                                                                  background-color: aqua;
-                                                                                                                                  */
+                                                                                                                                                                          background-color: aqua;
+                                                                                                                                                                          */
       margin: 20px 10px;
       border-radius: 10px;
       padding: 20px 0px;
@@ -76,8 +76,8 @@
                 <td>{{ video.title }}</td>
                 <td>{{ video.video_file }}</td>
                 <td>
-                  <button class="btn btn-primary">Edit</button>
-                  <button class="btn btn-danger">Delete</button>
+                  <a class="btn btn-primary" href="{% url 'update_video' video.id %}">Update</a>
+                  <a class="btn btn-danger mt-2" href="{% url 'delete_video' video.id %}">Delete</a>
                 </td>
               </tr>
             {% endfor %}

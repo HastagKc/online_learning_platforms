@@ -6,7 +6,13 @@ from django.contrib.auth.decorators import login_required
 
 
 def home(request):
-    return render(request, 'online_learning_app/index.html')
+    courses = Course.objects.all()
+    category = Category.objects.all()
+    context = {
+        'courses': courses,
+        'category': category,
+    }
+    return render(request, 'online_learning_app/index.html', context=context)
 
 # ----------------------------- Teacher Dashboard --------------------------------------------
 
@@ -89,6 +95,9 @@ def course_detail(request, id):
 
 @login_required(login_url='/accounts/log_in/')
 def add_course(request):
+    '''
+    this view add new course
+    '''
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
@@ -100,14 +109,38 @@ def add_course(request):
         form = CourseForm()
 
     context = {
-        'content_form': form,
+        'form': form,
     }
 
     return render(request, 'online_learning_app/course/add_course.html', context=context)
 
 
-# ---------------------------------------- video -----------------------------------------------
-@login_required
+def update_course(request, id):
+    '''
+    This view update the content of the course
+    '''
+    course = get_object_or_404(Course, pk=id)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('tech_dashboard')
+
+    else:
+        form = CourseForm(instance=course)
+
+    return render(request, 'online_learning_app/course/add_course.html', {'form': form})
+
+
+def delete_course(request, id):
+    course = get_object_or_404(Course, pk=id)
+    course.delete()
+    return redirect('tech_dashboard')
+
+    # ---------------------------------------- video -----------------------------------------------
+
+
+@login_required(login_url='/accounts/log_in/')
 def add_video(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES, user=request.user)
@@ -117,3 +150,23 @@ def add_video(request):
     else:
         form = VideoForm(user=request.user)
     return render(request, 'online_learning_app/video/add_video.html', {'form': form})
+
+
+def update_video(request, id):
+    video = get_object_or_404(Video, pk=id)
+    if request.method == 'POST':
+        form = VideoForm(request.POST, instance=video)
+        if form.is_valid():
+            form.save()
+            return redirect('tech_dashboard')
+
+    else:
+        form = VideoForm(instance=video)
+
+    return render(request, 'online_learning_app/video/add_video.html', {'form': form})
+
+
+def delete_video(request, id):
+    video = get_object_or_404(Video, pk=id)
+    video.delete()
+    return redirect('tech_dashboard')

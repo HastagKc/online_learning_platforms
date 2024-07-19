@@ -150,9 +150,16 @@
 {% block content %}
   <script type="text/javascript">
     function confirmDelete(event, form) {
-      event.preventDefault()
-      if (confirm('Do you want to delete this item?')) {
-        form.submit()
+      event.preventDefault() // Prevent form submission
+      if (confirm('Do you want to delete this course?')) {
+        form.submit() // Submit the form if confirmed
+      }
+    }
+    
+    function confirmDeleteCourse(event, form) {
+      event.preventDefault() // Prevent form submission
+      if (confirm('Do you want to delete this course?')) {
+        form.submit() // Submit the form if confirmed
       }
     }
   </script>
@@ -186,7 +193,7 @@
                 <div class="col-6">
                   <div class="search-container">
                     <input type="text" class="search-input" id="searchInput" placeholder="Search..." />
-                    <button class="search-btn" onclick="searchItems()">Search</button>
+                    <button class="search-btn">Search</button>
                   </div>
                 </div>
               </div>
@@ -221,12 +228,15 @@
                               <img src="{{ course.course_image.url }}" class="img-fluid rounded-start" alt="Course Image" style="height: 180px;" />
                               <div class="row text-center mt-2">
                                 <div class="col">
-                                  <a href="#" class="btn btn-primary">Update</a>
+                                  <a href="{% url 'update_course' course.id %}" class="btn btn-primary">Update</a>
                                 </div>
                               </div>
                               <div class="row text-center mt-2">
                                 <div class="col">
-                                  <a href="#" class="btn btn-danger">Delete</a>
+                                  <form method="POST" action="{% url 'delete_course' course.id %}" style="display: inline;" onsubmit="confirmDelete(event, this);">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                  </form>
                                 </div>
                               </div>
                             </div>
@@ -315,12 +325,12 @@
                           <img src="{{ course.course_image.url }}" class="img-fluid rounded-start" alt="Course Image" style="height: 180px;" />
                           <div class="row text-center mt-2">
                             <div class="col">
-                              <a href="#" class="btn btn-primary">Update</a>
+                              <a href="{% url 'update_course' course.id %}" class="btn btn-primary">Update</a>
                             </div>
                           </div>
                           <div class="row text-center mt-2">
                             <div class="col">
-                              <a href="#" class="btn btn-danger">Delete</a>
+                              <a href="{% url 'delete_course' course.id %}">Delete</a>
                             </div>
                           </div>
                         </div>

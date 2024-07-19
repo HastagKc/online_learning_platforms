@@ -283,145 +283,50 @@
     <div class="row">
       <div class="col">
         <div class="tab">
-          <button class="tablinks" data-tab="tab1">Web Development</button>
-          <button class="tablinks" data-tab="tab2">App Development</button>
-          <button class="tablinks" data-tab="tab3">Graphic Design</button>
+          {% for category in category %}
+            <button class="tablinks" data-tab="{{ category.cate_title }}">{{ category.cate_title }}</button>
+          {% endfor %}
         </div>
       </div>
-      <!-- tab content -->
-      <div id="tab1" class="tabcontent">
-        <div class="row">
-          <div class="col-lg-3 col-md-4 col-sm-6 my-4">
-            <!-- tab1 -->
-            <div class="card">
-              <img class="card-img-top" src="{% static 'images/web_dev_img.png' %}" alt="Card image cap" />
-              <div class="card-body">
-                <h5 class="card-title">Frontend Development with Html, Css and Js</h5>
-                <p class="author_name">Kshittiz Chaudhary Tharu</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-                <p>Rs.5000</p>
+      {% for category in category %}
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <!-- tab content -->
+              <div id="{{ category.cate_title }}" class="tabcontent">
+                <div class="row">
+                  {% for course in courses %}
+                    {% if course.category.cate_title == category.cate_title %}
+                      <div class="col-lg-3 col-md-4 col-sm-6 my-4">
+                        <!-- tab1 -->
 
-                <a href="#" class="btn btn-primary text-center" style="width: 100%;">Add To Cart</a>
-              </div>
-            </div>
-          </div>
+                        <div class="card">
+                          <img class="card-img-top" src="{{ course.course_image.url }}" alt="Card image cap" />
+                          <div class="card-body">
+                            <h5 class="card-title">{{ course.course_title }}</h5>
 
-          <div class="col-lg-3 col-md-4 col-sm-6 my-4">
-            <!-- tab1 -->
-            <div class="card">
-              <img class="card-img-top" src="{% static 'images/django.png' %}" alt="Card image cap" />
-              <div class="card-body">
-                <h5 class="card-title">Full Stack Web development with Django</h5>
+                            <p class="author_name">{{ course.created_by }}</p>
+                            <p>
+                              <span class="fa fa-star checked"></span>
+                              <span class="fa fa-star checked"></span>
+                              <span class="fa fa-star checked"></span>
+                              <span class="fa fa-star"></span>
+                              <span class="fa fa-star"></span>
+                            </p>
+                            <p>{{ course.price }}</p>
 
-                <p class="author_name">Suresh Rokaya</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-                <p>Rs.5000</p>
-
-                <a href="#" class="btn btn-primary text-center" style="width: 100%;">Add To Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-sm-6 my-4">
-            <!-- tab1 -->
-            <div class="card">
-              <img class="card-img-top" src="{% static 'images/react_js.png' %}" alt="Card image cap" />
-              <div class="card-body">
-                <h5 class="card-title">Web development with React js</h5>
-
-                <p class="author_name">Bibek Karki</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-                <p>Rs.5000</p>
-
-                <a href="#" class="btn btn-primary text-center" style="width: 100%;">Add To Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-sm-6 my-4">
-            <!-- tab1 -->
-            <div class="card">
-              <img class="card-img-top" src="{% static 'images/java.png' %}" alt="Card image cap" />
-              <div class="card-body">
-                <h5 class="card-title">Full Stack Web development with Java</h5>
-
-                <p class="author_name">Krishna Chaudhary</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-                <p>Rs.5000</p>
-
-                <a href="#" class="btn btn-primary text-center" style="width: 100%;">Add To Cart</a>
+                            <a href="#" class="btn btn-primary text-center" style="width: 100%;">Add To Cart</a>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="col-4">
-          <!-- tab1 -->
-          <div id="tab1" class="tabcontent">
-            <div class="card" style="width: 18rem;">
-              <img class="card-img-top" src="{% static 'images/web_dev_img.png' %}" alt="Card image cap" />
-              <div class="card-body">
-                <h5 class="card-title">Web Development</h5>
-                <p class="card-text">Web development is the process of building and maintaining websites. It involves a variety of tasks including web design, web content development, client-side/server-side scripting, and network security configuration.</p>
-                <p>rating</p>
-                <a href="#" class="btn btn-primary">Add To Cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <!-- tab2 -->
-          <div id="tab2" class="tabcontent">
-            <h1>Tab 2</h1>
-
-            <p>Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans. It encompasses a broad range of technologies and applications, aiming to mimic cognitive functions such as problem-solving, learning, reasoning, perception, language understanding, and decision-making.
-
-              Neural Networks: Inspired by the human brain, neural networks are a fundamental component of deep learning, a branch of machine learning. They consist of interconnected nodes (neurons) organized in layers, where each layer processes information and passes it on to the next.
-
-              Natural Language Processing (NLP): NLP focuses on the interaction between computers and humans through natural language. It enables machines to understand, interpret, and generate human language, facilitating tasks like language translation, sentiment analysis, and chatbots.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <!-- tab 3 -->
-          <div id="tab3" class="tabcontent">
-            <h1>Tab 3</h1>
-
-            <p>Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans. It encompasses a broad range of technologies and applications, aiming to mimic cognitive functions such as problem-solving, learning, reasoning, perception, language understanding, and decision-making.
-
-              Machine Learning: A subset of AI that enables systems to learn and improve from experience without being explicitly programmed. It involves algorithms that identify patterns in data and make decisions based on those patterns.</p>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
