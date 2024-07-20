@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import *
 urlpatterns = [
+    # online learning main route
     path('', home, name="home"),
+    path('details_page/<int:id>/', details_page, name='details_page'),
 
     # teacher dashboard
     path('tech_dashboard/', teacher_dashboard, name="tech_dashboard"),
@@ -21,4 +23,9 @@ urlpatterns = [
     path('add_video/', add_video, name='add_video'),
     path('update_video/<int:id>/', update_video, name='update_video'),
     path('delete_video/<int:id>/', delete_video, name='delete_video'),
+
+
+    # study pannel
+    path('study_pannel/', study_pannel, name='study_pannel')
+
 ]

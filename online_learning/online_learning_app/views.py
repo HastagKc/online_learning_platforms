@@ -4,6 +4,8 @@ from .models import Course, Category, Video
 
 from django.contrib.auth.decorators import login_required
 
+# --------------------------------- Online learning app --------------------------------------
+
 
 def home(request):
     courses = Course.objects.all()
@@ -13,6 +15,15 @@ def home(request):
         'category': category,
     }
     return render(request, 'online_learning_app/index.html', context=context)
+
+
+@login_required(login_url='/accounts/log_in/')
+def details_page(request, id):
+    course = get_object_or_404(Course, id=id)
+    context = {
+        'course': course,
+    }
+    return render(request, 'online_learning_app/details_page.html', context=context)
 
 # ----------------------------- Teacher Dashboard --------------------------------------------
 
@@ -170,3 +181,11 @@ def delete_video(request, id):
     video = get_object_or_404(Video, pk=id)
     video.delete()
     return redirect('tech_dashboard')
+
+
+# content access page
+
+def study_pannel(request):
+    videos = Video.objects.all()
+    print(videos)
+    return render(request, 'online_learning_app/study_pannel.html', {'videos': videos})
