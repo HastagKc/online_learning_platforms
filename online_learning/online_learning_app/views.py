@@ -1,3 +1,5 @@
+from .models import Course, Video
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CourseForm, CategoryForm, VideoForm
 from .models import Course, Category, Video
@@ -91,7 +93,7 @@ def delete_category(request, id):
 @login_required(login_url='/accounts/log_in/')
 def course_detail(request, id):
     '''
-    this view will responsible to addtional information and content management about 
+    this view will responsible to addtional information and content management about
     course
     '''
     course = Course.objects.filter(id=id)
@@ -185,7 +187,27 @@ def delete_video(request, id):
 
 # content access page
 
-def study_pannel(request):
-    videos = Video.objects.all()
-    print(videos)
-    return render(request, 'online_learning_app/study_pannel.html', {'videos': videos})
+
+def study_pannel(request, id):
+    course = get_object_or_404(Course, id=id)
+    related_videos = course.videos.all()  # Accessing related videos
+    # Handling case when there are no videos
+    first_video = related_videos[0] if related_videos else None
+    context = {
+        'course': course,
+        'related_videos': related_videos,
+        'video': first_video,  # Use 'video' for consistency in template
+    }
+    return render(request, 'online_learning_app/study_pannel.html', context=context)
+
+
+def watch_video(request, id):
+    video = get_object_or_404(Video, id=id)
+    course = video.course
+    related_videos = course.videos.all()  # Accessing related videos
+    context = {
+        'course': course,
+        'related_videos': related_videos,
+        'video': video,  # Specific video to watch
+    }
+    return render(request, 'online_learning_app/study_pannel.html', context=context)
