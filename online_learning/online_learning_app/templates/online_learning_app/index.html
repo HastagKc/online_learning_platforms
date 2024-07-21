@@ -9,39 +9,28 @@
 <!-- css block -->
 {% block css %}
 
+<style>
+  .tab .tablinks {
+    font-size: 1rem;
+    /* background-color: blue; */
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+  }
+
+  .tab .tablinks:hover {
+    color: red;
+  }
+</style>
+
+
 {% endblock %}
 
 {% block content %}
 <!-- carousel -->
-<div id="carousel" class="carousel_div">
-  <div class="carousel_content">
-    <p class="carousel__title">
-      <span class="heading_text__one" id="heading__one">Level</span> <span class="heading_text__one"
-        id="heading__two">Up</span>
-      <br /> <span style="opacity: 0.65; font-size:24px;">your skill with</span>
-      online learning
-    </p>
-    <p class="carousel_des">Unlock your potential and advance your career with online learning. Our comprehensive
-      courses are designed to help you acquire new skills, stay updated with industry trends, and achieve your personal
-      and professional goals. Whether you're looking to master a new technology, improve your leadership abilities, or
-      explore a new field, our platform offers flexible and accessible learning opportunities tailored to your needs.
-      Start your journey today and take the next step towards a brighter future!</p>
 
-    <div class="search_bar_div">
-      <i class="fa-solid fa-magnifying-glass search_bar_icon"></i>
-      <input class="search_bar" type="text" name="" placeholder="Explore our courses" />
-      <select id="courses" name="courses">
-        <option value="volvo">Web Development</option>
-        <option value="saab">App Developement</option>
-        <option value="mercedes">Digital Marketing</option>
-        <option value="audi">Graphic Design</option>
-      </select>
-    </div>
-  </div>
-  <div class="carousel_image_div">
-    <img src="{% static 'images/carousel_img1.png' %}" alt="Carousel Image" />
-  </div>
-</div>
 <!-- carousel end -->
 
 <!-- course -->

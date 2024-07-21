@@ -211,3 +211,9 @@ def watch_video(request, id):
         'video': video,  # Specific video to watch
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
+
+
+# test
+
+def dashboardTest(request):
+    return render(request, 'side_bar.html')
