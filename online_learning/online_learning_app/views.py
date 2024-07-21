@@ -5,7 +5,8 @@ from .forms import CourseForm, CategoryForm, VideoForm
 from .models import Course, Category, Video
 
 from django.contrib.auth.decorators import login_required
-
+# for redirect into same page
+from django.http import HttpResponseRedirect
 # --------------------------------- Online learning app --------------------------------------
 
 
@@ -29,19 +30,9 @@ def details_page(request, id):
 
 # ----------------------------- Teacher Dashboard --------------------------------------------
 
-
-@login_required(login_url='/accounts/log_in/')
-def teacher_dashboard(request):
-    all_course = Course.objects.all()
-    all_categories = Category.objects.all()
-    context = {
-        'all_course': all_course,
-        'all_categories': all_categories,
-    }
-    return render(request, 'online_learning_app/dashboard/teacher_dashboard.html', context=context)
-
-
 # ------------------------- Category ------------------------------------------
+
+
 @login_required(login_url='/accounts/log_in/')
 def add_category(request):
     if request.method == 'POST':
@@ -50,7 +41,7 @@ def add_category(request):
             cate = form.save(commit=False)
             cate.created_by = request.user.username
             cate.save()
-            return redirect('tech_dashboard')
+            return redirect('courses_dashboard')
     else:
         form = CategoryForm()
 
@@ -68,7 +59,7 @@ def update_category(request, id):
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('tech_dashboard')
+            return redirect('courses_dashboard')
 
     else:
         form = CategoryForm(instance=category)
@@ -80,11 +71,9 @@ def update_category(request, id):
 
 
 def delete_category(request, id):
-    category = get_object_or_404(Category, pk=id)
-    if request.method == 'POST':
-        category.delete()
-        return redirect('tech_dashboard')
-    return render(request, 'online_learning_app/dashboard/teacher_dashboard.html', {'category': category})
+    category = get_object_or_404(Category, id=id)
+    category.delete()
+    return redirect('courses_dashboard')
 
 
 # ------------------------------------ Course -----------------------------------------------
@@ -117,7 +106,7 @@ def add_course(request):
             course = form.save(commit=False)
             course.created_by = request.user.username
             course.save()
-            return redirect('tech_dashboard')
+            return redirect('courses_dashboard')
     else:
         form = CourseForm()
 
@@ -137,7 +126,7 @@ def update_course(request, id):
         form = CourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
-            return redirect('tech_dashboard')
+            return redirect('courses_dashboard')
 
     else:
         form = CourseForm(instance=course)
@@ -148,7 +137,7 @@ def update_course(request, id):
 def delete_course(request, id):
     course = get_object_or_404(Course, pk=id)
     course.delete()
-    return redirect('tech_dashboard')
+    return redirect('courses_dashboard')
 
     # ---------------------------------------- video -----------------------------------------------
 
@@ -159,7 +148,9 @@ def add_video(request):
         form = VideoForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             video = form.save()
-            return redirect('tech_dashboard')
+            # Assuming the video model has a ForeignKey to the course model
+            course_id = video.course.id
+            return redirect('course_details', id=course_id)
     else:
         form = VideoForm(user=request.user)
     return render(request, 'online_learning_app/video/add_video.html', {'form': form})
@@ -171,7 +162,7 @@ def update_video(request, id):
         form = VideoForm(request.POST, instance=video)
         if form.is_valid():
             form.save()
-            return redirect('tech_dashboard')
+            return redirect('courses_dashboard')
 
     else:
         form = VideoForm(instance=video)
@@ -182,7 +173,7 @@ def update_video(request, id):
 def delete_video(request, id):
     video = get_object_or_404(Video, pk=id)
     video.delete()
-    return redirect('tech_dashboard')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 # content access page

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 EXTERNAL_APPS = [
     'online_learning_app',
     'accounts',
+    'dashboard',
 ]
 
 INSTALLED_APPS.extend(EXTERNAL_APPS)

@@ -5,8 +5,7 @@ urlpatterns = [
     path('', home, name="home"),
     path('details_page/<int:id>/', details_page, name='details_page'),
 
-    # teacher dashboard
-    path('tech_dashboard/', teacher_dashboard, name="tech_dashboard"),
+
 
     # category
     path('add_category/', add_category, name='add_category'),
