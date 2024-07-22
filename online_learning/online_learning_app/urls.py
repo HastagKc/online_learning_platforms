@@ -28,9 +28,4 @@ urlpatterns = [
     path('study_pannel/<int:id>/', study_pannel, name='study_pannel'),
     path('watch_video/<int:id>/', watch_video, name='watch_video'),
 
-
-
-    # test
-    path('dashboardTest/', dashboardTest, name='dashboardTest')
-
 ]

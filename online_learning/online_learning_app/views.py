@@ -12,10 +12,10 @@ from django.http import HttpResponseRedirect
 
 def home(request):
     courses = Course.objects.all()
-    category = Category.objects.all()
+    categories = Category.objects.all()
     context = {
         'courses': courses,
-        'category': category,
+        'categories': categories,
     }
     return render(request, 'online_learning_app/index.html', context=context)
 
@@ -156,13 +156,15 @@ def add_video(request):
     return render(request, 'online_learning_app/video/add_video.html', {'form': form})
 
 
+@login_required(login_url='/accounts/log_in/')
 def update_video(request, id):
     video = get_object_or_404(Video, pk=id)
     if request.method == 'POST':
         form = VideoForm(request.POST, instance=video)
         if form.is_valid():
-            form.save()
-            return redirect('courses_dashboard')
+            video = form.save()
+            course_id = video.course.id
+            return redirect('course_details', id=course_id)
 
     else:
         form = VideoForm(instance=video)
@@ -170,6 +172,7 @@ def update_video(request, id):
     return render(request, 'online_learning_app/video/add_video.html', {'form': form})
 
 
+@login_required(login_url='/accounts/log_in/')
 def delete_video(request, id):
     video = get_object_or_404(Video, pk=id)
     video.delete()
@@ -178,7 +181,7 @@ def delete_video(request, id):
 
 # content access page
 
-
+@login_required(login_url='/accounts/log_in/')
 def study_pannel(request, id):
     course = get_object_or_404(Course, id=id)
     related_videos = course.videos.all()  # Accessing related videos
@@ -192,6 +195,7 @@ def study_pannel(request, id):
     return render(request, 'online_learning_app/study_pannel.html', context=context)
 
 
+@login_required(login_url='/accounts/log_in/')
 def watch_video(request, id):
     video = get_object_or_404(Video, id=id)
     course = video.course
@@ -202,9 +206,3 @@ def watch_video(request, id):
         'video': video,  # Specific video to watch
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
-
-
-# test
-
-def dashboardTest(request):
-    return render(request, 'side_bar.html')

@@ -7,3 +7,7 @@
 a {
     text-decoration: none;
 }
+
+.checked {
+    color: gold;
+}

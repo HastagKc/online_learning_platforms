@@ -12,8 +12,10 @@ class CategoryForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['course_image', 'course_title',
-                  'course_desc', 'category', 'price']
+        fields = [
+            'course_image', 'course_title',
+            'course_desc', 'category', 'price'
+        ]
 
 
 class PDFForm(forms.ModelForm):

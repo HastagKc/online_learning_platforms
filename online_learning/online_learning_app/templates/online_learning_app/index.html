@@ -1,94 +1,213 @@
-<!-- extending templates from base.html -->
 {% extends 'base.html' %}
-
-<!-- load static -->
-
 {% load static %}
-<!-- content -->
 
-<!-- css block -->
 {% block css %}
-
 <style>
-  .tab .tablinks {
-    font-size: 1rem;
-    /* background-color: blue; */
-    padding: 5px;
+  .search_bar_div {
+    padding: 2px;
     border-radius: 5px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .search_bar_icon {
+    padding: 10px;
+  }
+
+  .search_bar {
     outline: none;
     border: none;
+    padding: 5px;
     background-color: transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 250px;
   }
 
-  .tab .tablinks:hover {
-    color: red;
+  .search_bar:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    background-color: transparent;
+    width: 100%;
+    max-width: 300px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    opacity: 0.5;
   }
 </style>
-
-
 {% endblock %}
 
 {% block content %}
-<!-- carousel -->
+<section class="py-4">
+  <div class="container-fluid overflow-hidden">
+    <div class="row gy-5 gy-lg-0 align-items-lg-center justify-content-lg-between">
+      <div class="col-12 col-lg-6 order-1 order-lg-0">
+        <h2 class="display-4 fw-bold mb-3">Upgrade your skills with Online Learning</h2>
+        <p class="fs-5 mb-5">Unlock your potential and advance your career with online learning.
+          Our comprehensive courses are designed to help you acquire new skills, stay updated with industry trends,
+          and achieve your personal and professional goals. Whether you're looking to master a new technology, improve
+          your leadership abilities, or explore a new field, our platform offers flexible and accessible learning
+          opportunities tailored to your needs. Start your journey today and take the next step towards a brighter
+          future.</p>
+        <div class="d-grid gap-2 d-sm-flex">
+          <div class="search_bar_div">
+            <i class="fa-solid fa-magnifying-glass search_bar_icon"></i>
+            <input class="search_bar" type="text" name="" placeholder="Explore Our Courses">
+            <select id="courses" name="courses">
+              <option value="web-development">Web Development</option>
+              <option value="app-development">App Development</option>
+              <option value="digital-marketing">Digital Marketing</option>
+              <option value="graphic-design">Graphic Design</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-5 text-center">
+        <div class="position-relative">
+          <div class="bsb-circle border border-4 border-warning position-absolute top-50 start-10 translate-middle z-1">
+          </div>
+          <div class="bsb-circle bg-primary position-absolute top-50 start-50 translate-middle"
+            style="--bsb-cs: 460px;"></div>
+          <div class="bsb-circle border border-4 border-warning position-absolute top-10 end-0 z-1"
+            style="--bsb-cs: 100px;"></div>
+          <img class="img-fluid position-relative z-2" loading="lazy" src="{% static 'images/hero_section_image.png' %}"
+            alt="hero section image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- carousel end -->
+<div class="container-fluid bg-light pb-4" style="padding-top: 20px;">
 
-<!-- course -->
-<div class="container-fluid">
-  <div class="row">
+
+  <div class="row mt-4 mb-4">
     <div class="col">
-      <h2 class="my-4">Explores All Avaiable Courses</h2>
+      <h2 class="fs-2 fw-bold">Explore Our Courses</h2>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div class="tab">
-        {% for category in category %}
-        <button class="tablinks" data-tab="{{ category.cate_title }}">{{ category.cate_title }}</button>
+      <!-- Nav Tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        {% for category in categories %}
+        <li class="nav-item" role="presentation">
+          <a class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ category.id }}" data-bs-toggle="tab"
+            href="#category-{{ category.id }}" role="tab">{{ category.cate_title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        {% for category in categories %}
+        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="category-{{ category.id }}"
+          role="tabpanel">
+          <div class="row">
+            {% for course in courses %}
+            {% if course.category.id == category.id %}
+            <div class="col-lg-3 col-md-4 col-sm-6 my-4">
+              <div class="card">
+                <img class="card-img-top" src="{{ course.course_image.url }}" alt="Card image cap" />
+                <div class="card-body">
+                  <h5 class="card-title">{{ course.course_title }}</h5>
+                  <p class="author_name">{{ course.created_by }}</p>
+                  <p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                  </p>
+                  <p>{{ course.price }}</p>
+                  <a href="{% url 'details_page' course.id %}" class="btn btn-primary text-center"
+                    style="width: 100%;">Go to course</a>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
         {% endfor %}
       </div>
     </div>
-    {% for category in category %}
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <!-- tab content -->
-          <div id="{{ category.cate_title }}" class="tabcontent">
-            <div class="row">
-              {% for course in courses %}
-              {% if course.category.cate_title == category.cate_title %}
-              <div class="col-lg-3 col-md-4 col-sm-6 my-4">
-                <!-- tab1 -->
+  </div>
+</div>
 
-                <div class="card">
-                  <img class="card-img-top" src="{{ course.course_image.url }}" alt="Card image cap" />
-                  <div class="card-body">
-                    <h5 class="card-title">{{ course.course_title }}</h5>
 
-                    <p class="author_name">{{ course.created_by }}</p>
-                    <p>
-                      <span class="fa fa-star checked"></span>
-                      <span class="fa fa-star checked"></span>
-                      <span class="fa fa-star checked"></span>
-                      <span class="fa fa-star"></span>
-                      <span class="fa fa-star"></span>
-                    </p>
-                    <p>{{ course.price }}</p>
+<!-- about us  section  -->
+<section class="py-3 py-md-5 py-xl-8" style="padding: 20px;">
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+        <h2 class="mb-4 display-5 text-center">About Us</h2>
+        <p class="text-primary mb-5 text-center lead fs-5">Empowering Your Learning Journey
+          At Online Learning, our mission is to empower individuals to unlock their full potential through accessible
+          and high-quality education. We believe that learning should be a transformative experience, one that equips
+          you with the skills and knowledge needed to succeed in today's rapidly evolving world.</p>
+        <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+      </div>
+    </div>
+  </div>
 
-                    <a href="{% url 'details_page' course.id %}" class="btn btn-primary text-center"
-                      style="width: 100%;">Go to course</a>
+  <div class="container-fluid">
+    <div class="row gy-4 gy-lg-0 align-items-lg-center">
+      <div class="col-12 col-lg-6">
+        <img class="img-fluid rounded border border-dark" loading="lazy" src="/static/images/about_section_img.png"
+          alt="About Us">
+      </div>
+      <div class="col-12 col-lg-6 col-xxl-6">
+        <div class="row justify-content-lg-end">
+          <div class="col-12 col-lg-11">
+            <div class="about-wrapper">
+              <h class="fs-3">Who We Are</h>
+              <p class="lead mb-4 mb-md-5 fs-6">
+                Founded by a team of passionate educators and tech enthusiasts, Online Learning is dedicated to
+                providing top-notch courses that cater to various interests and professional goals. Our platform brings
+                together industry experts, experienced instructors, and cutting-edge technology to deliver a learning
+                experience that is both engaging and effective.</p>
+              <div class="row gy-4 mb-2 mb-md-5">
+                <div class="col-12 col-md-6">
+                  <div class="card border border-dark">
+                    <div class="card-body p-4">
+                      <h3 class="display-5 fw-bold text-primary text-center mb-2">370+</h3>
+                      <p class="fw-bold text-center m-0">Qualified Expert Teacher</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="card border border-dark">
+                    <div class="card-body p-4">
+                      <h3 class="display-5 fw-bold text-primary text-center mb-2">18k+</h3>
+                      <p class="fw-bold text-center m-0">Satisfied Student</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              {% endif %}
-              {% endfor %}
+              <a href="#!" class="btn btn-primary bsb-btn-2xl fs-6">
+                Explore
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor"
+                  class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
-    {% endfor %}
   </div>
-</div>
+</section>
 {% endblock %}

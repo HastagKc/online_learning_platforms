@@ -10,7 +10,11 @@ from online_learning_app.models import Course, Category
 
 @login_required(login_url='/accounts/log_in/')
 def dashboard(request):
-    return render(request, 'dashboard/teacher/dashboard.html')
+    courses = Course.objects.all()
+    context = {
+        'courses': courses,
+    }
+    return render(request, 'dashboard/teacher/dashboard.html', context=context)
 
 # notifications
 
@@ -19,11 +23,19 @@ def dashboard(request):
 def notifications(request):
     return render(request, 'dashboard/teacher/notifications.html')
 
-
+# ------------------------------------ Profile -------------------------------------------------
 # profile
+
+
 @login_required(login_url='/accounts/log_in/')
-def profile(request):
+def teacher_profile(request):
     return render(request, 'dashboard/teacher/profile.html')
+
+# Teacher Profile
+
+
+def teacher_profile(request):
+    pass
 
 
 # tables
