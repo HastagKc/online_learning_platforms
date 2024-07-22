@@ -26,6 +26,7 @@ class PDF(models.Model):
         Course, on_delete=models.CASCADE, related_name='pdfs')
     pdf_file = models.FileField(upload_to='course_pdfs/')
     title = models.CharField(max_length=200)
+    pdf_des = models.CharField(max_length=200,default='')
 
     def __str__(self):
         return self.title

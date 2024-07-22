@@ -18,20 +18,6 @@ class CourseForm(forms.ModelForm):
         ]
 
 
-class PDFForm(forms.ModelForm):
-    class Meta:
-        model = PDF
-        fields = ['course', 'pdf_file', 'title']
-
-
-class VideoForm(forms.ModelForm):
-    class Meta:
-        model = Video
-        fields = ['course', 'video_file', 'title']
-
-    from django import forms
-
-
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
@@ -44,6 +30,12 @@ class VideoForm(forms.ModelForm):
             self.fields['course'].queryset = Course.objects.filter(
                 created_by=user.username
             )
+
+
+class PDFForm(forms.ModelForm):
+    class Meta:
+        model = PDF
+        fields = ['course', 'pdf_file', 'title', 'pdf_des']
 
 
 class QuizForm(forms.ModelForm):

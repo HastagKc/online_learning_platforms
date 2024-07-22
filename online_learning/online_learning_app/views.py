@@ -1,8 +1,8 @@
 from .models import Course, Video
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CourseForm, CategoryForm, VideoForm
-from .models import Course, Category, Video
+from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
+from .models import Course, Category, Video, PDF
 
 from django.contrib.auth.decorators import login_required
 # for redirect into same page
@@ -87,10 +87,12 @@ def course_detail(request, id):
     '''
     course = Course.objects.filter(id=id)
     course_videos = Video.objects.filter(course=id)
+    course_pdf = PDF.objects.filter(course=id)
 
     context = {
         'course': course,
         'course_videos': course_videos,
+        'course_pdf': course_pdf,
     }
     return render(request, 'online_learning_app/course/course_details.html', context=context)
 
@@ -206,3 +208,47 @@ def watch_video(request, id):
         'video': video,  # Specific video to watch
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
+
+
+# ------------------------------  PDF --------------------------------------------------
+@login_required(login_url='/accounts/log_in/')
+def add_course_pdf(request):
+    '''
+    This view is responsible for adding course pdf to Pdf model
+    '''
+    if request.method == 'POST':
+        form = PDFForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = PDFForm()
+    return render(request, 'online_learning_app/pdf/add_course_pdf.html', {'form': form})
+
+
+@login_required(login_url='/accounts/log_in/')
+def update_course_pdf(request, id):
+    '''
+    this view is responsible to update upf file details
+    '''
+    pdf = get_object_or_404(PDF, id=id)
+    if request.method == 'POST':
+        form = PDFForm(request.POST, instance=pdf)
+        if form.is_valid():
+            pdf = form.save()
+            course_id = pdf.course.id
+            return redirect('course_details', id=course_id)
+
+    else:
+        form = PDFForm(instance=pdf)
+    return render(request, 'online_learning_app/pdf/add_course_pdf.html', {'form': form})
+
+
+@login_required(login_url='/accounts/log_in/')
+def delete_course_pdf(request, id):
+    '''
+    this views is responsible for deleting courses pdf
+    '''
+    pdf = get_object_or_404(PDF, id=id)
+    pdf.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

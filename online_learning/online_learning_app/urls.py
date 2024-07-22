@@ -28,4 +28,12 @@ urlpatterns = [
     path('study_pannel/<int:id>/', study_pannel, name='study_pannel'),
     path('watch_video/<int:id>/', watch_video, name='watch_video'),
 
+
+    # pdf
+    path('add_course_pdf/', add_course_pdf, name='add_course_pdf'),
+    path('update_course_pdf/<int:id>/',
+         update_course_pdf, name='update_course_pdf'),
+    path('delete_course_pdf/<int:id>/',
+         delete_course_pdf, name='delete_course_pdf'),
+
 ]
