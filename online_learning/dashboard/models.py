@@ -6,8 +6,9 @@ from django.core.validators import MinLengthValidator
 
 
 class TeacherProfile(models.Model):
-    user = models.ForeignKey(
-        CustomUserModel, on_delete=models.CASCADE, related_name='Users')
+    user = models.OneToOneField(
+        CustomUserModel, on_delete=models.CASCADE, related_name='teacherprofile'
+    )
     profile_img = models.ImageField(upload_to='profile_img')
     bio = models.TextField()
     age = models.PositiveIntegerField()
