@@ -1,3 +1,8 @@
+from .models import PDF  # Make sure to import your PDF model
+from django.http import FileResponse, Http404
+from .models import PDF
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Course, Category, Video, PDF
 from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
@@ -179,35 +184,6 @@ def delete_video(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
-# content access page
-
-@login_required(login_url='/accounts/log_in/')
-def study_pannel(request, id):
-    course = get_object_or_404(Course, id=id)
-    related_videos = course.videos.all()  # Accessing related videos
-    # Handling case when there are no videos
-    first_video = related_videos[0] if related_videos else None
-    context = {
-        'course': course,
-        'related_videos': related_videos,
-        'video': first_video,  # Use 'video' for consistency in template
-    }
-    return render(request, 'online_learning_app/study_pannel.html', context=context)
-
-
-@login_required(login_url='/accounts/log_in/')
-def watch_video(request, id):
-    video = get_object_or_404(Video, id=id)
-    course = video.course
-    related_videos = course.videos.all()  # Accessing related videos
-    context = {
-        'course': course,
-        'related_videos': related_videos,
-        'video': video,  # Specific video to watch
-    }
-    return render(request, 'online_learning_app/study_pannel.html', context=context)
-
-
 # ------------------------------  PDF --------------------------------------------------
 @login_required(login_url='/accounts/log_in/')
 def add_course_pdf(request):
@@ -251,3 +227,54 @@ def delete_course_pdf(request, id):
     pdf = get_object_or_404(PDF, id=id)
     pdf.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+# ------------------------------------- Study Pannel------------------------------------------
+# content access page
+
+@login_required(login_url='/accounts/log_in/')
+def study_pannel(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    related_videos = course.videos.all()  # Accessing related videos
+    # Handling case when there are no videos
+    first_video = related_videos[0] if related_videos else None
+    # fetching pdf content related to course
+    pdf = PDF.objects.filter(course=course_id)
+    context = {
+        'course': course,
+        'related_videos': related_videos,
+        'video': first_video,
+        'pdf': pdf,
+    }
+    return render(request, 'online_learning_app/study_pannel.html', context=context)
+
+
+@login_required(login_url='/accounts/log_in/')
+def watch_video(request, id):
+    video = get_object_or_404(Video, id=id)
+    course = video.course
+    related_videos = course.videos.all()  # Accessing related videos
+    context = {
+        'course': course,
+        'related_videos': related_videos,
+        'video': video,  # Specific video to watch
+    }
+    return render(request, 'online_learning_app/study_pannel.html', context=context)
+
+
+# make pd download able
+
+
+def download_pdf(request, pdf_id):
+    # Get the PDF object or return a 404 if not found
+    pdf = get_object_or_404(PDF, id=pdf_id)
+
+    try:
+        # Open the file and prepare it for download
+        response = FileResponse(pdf.pdf_file.open(),
+                                as_attachment=True, filename=pdf.pdf_file.name)
+        response['Content-Type'] = 'application/pdf'
+        return response
+    except IOError:
+        # Handle file not found or any IO errors
+        raise Http404("PDF file not found.")

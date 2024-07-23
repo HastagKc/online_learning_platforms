@@ -67,42 +67,127 @@
 
   <div class="container-fluid mt-3">
     <div class="row">
-      <div class="col-8">
-        <!-- video player -->
+      <div class="col-12 col-lg-8">
 
-        <video id="custom-video" width="100%" height="auto" controls autoplay>
+        <div class="row">
+          <div class="col-12">
+            <!-- video player -->
 
-          {% if video %}
-          <source src="{{ video.video_file.url }}" type="video/mp4" />
+            <video id="custom-video" width="100%" height="auto" controls autoplay>
 
-          {% else %}
-          <source src="{{ first_video.video_file.url }}" type="video/mp4" />
-          {% endif %}
-        </video>
-        <!-- video player end-->
-        <!-- course content start -->
+              {% if video %}
+              <source src="{{ video.video_file.url }}" type="video/mp4" />
 
-        <div class="row mt-4">
-          <div class="col">
-            <h3>{{course.course_title}}</h3>
-            <p>{{course.course_desc}}</p>
-            <p class="text-white">
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star"></span>
-              <span class="fa fa-star"></span>
-            </p>
-            <p>creator of this course: {{course.created_by}}</p>
-            <p>Update at:</p>
-            <p>Download Course PDF</p>
+              {% else %}
+              <source src="{{ first_video.video_file.url }}" type="video/mp4" />
+              {% endif %}
+            </video>
+
+            <!-- video end -->
           </div>
         </div>
 
-        <!-- course content end -->
+
+
+        <div class="container-fluid mt-2">
+          <div class="row">
+            <div class="col-12">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="details-tab" data-bs-toggle="tab" href="#details" role="tab"
+                    aria-controls="details" aria-selected="true">Course Details</a>
+                </li>
+                <li class="nav-item d-block d-lg-none" role="presentation">
+                  <a class="nav-link" id="course_content-tab" data-bs-toggle="tab" href="#course_content" role="tab"
+                    aria-controls="course_content" aria-selected="false">Course Content</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="pdf-tab" data-bs-toggle="tab" href="#pdf" role="tab" aria-controls="pdf"
+                    aria-selected="false">PDF</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="qna-tab" data-bs-toggle="tab" href="#qna" role="tab" aria-controls="qna"
+                    aria-selected="false">Q&N</a>
+                </li>
+              </ul>
+
+              <div class="tab-content mt-3" id="myTabContent">
+                <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                  <!-- Course details content here -->
+                  <h4 class="mt-3">{{ course.course_title }}</h4>
+                  <p class="mt-2">{{ course.course_desc }}</p>
+
+                </div>
+                <div class="tab-pane fade" id="course_content" role="tabpanel" aria-labelledby="course_content-tab">
+                  <!-- Course content here -->
+                  <div class="accordion" id="accordionExample">
+                    {% for video in related_videos %}
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="heading{{ video.id }}">
+                        <button class="accordion-button collapsed video__title" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapse{{ video.id }}" aria-expanded="false"
+                          aria-controls="collapse{{ video.id }}">
+                          {{ video.title }}
+                        </button>
+                      </h2>
+                      <div id="collapse{{ video.id }}" class="accordion-collapse collapse"
+                        aria-labelledby="heading{{ video.id }}" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, iusto nostrum maiores
+                            ullam
+                            eveniet illum tempora magnam est inventore quasi ad consequatur ab vitae, quod itaque qui
+                            eligendi.
+                            Pariatur, quod.</p>
+                          <a style="text-decoration: none; padding: 5px 10px; border: 1px solid black; border-radius: 5px;"
+                            href="{% url 'watch_video' video.id %}" class="">Watch</a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pdf" role="tabpanel" aria-labelledby="pdf-tab">
+                  <!-- PDF content here -->
+                  <div class="accordion" id="accordionExample">
+                    {% for pdf in pdf %}
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingPdf{{ pdf.id }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapsePdf{{ pdf.id }}" aria-expanded="false"
+                          aria-controls="collapsePdf{{ pdf.id }}">
+                          {{ pdf.title }}
+                        </button>
+                      </h2>
+                      <div id="collapsePdf{{ pdf.id }}" class="accordion-collapse collapse"
+                        aria-labelledby="headingPdf{{ pdf.id }}" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          {{ pdf.pdf_des }}
+                          <a href="{% url 'download_pdf' pdf.id %}" class="btn btn-primary mt-2">Download Pdf</a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="qna" role="tabpanel" aria-labelledby="qna-tab">
+                  <!-- Q&N content here -->
+                  <p>Content for the Q&N tab.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
       </div>
 
-      <div class="col-4">
+      <!-- only visiual on col-lg-block  -->
+      <!-- course related video  -->
+      <div class="col-12 col-lg-4 d-none d-lg-block">
         {% for video in related_videos %}
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -123,7 +208,9 @@
         </div>
         {% endfor %}
       </div>
+      <!-- course related video end   -->
     </div>
+
   </div>
 
   <!-- Bootstrap JS -->

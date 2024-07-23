@@ -25,7 +25,7 @@ urlpatterns = [
 
 
     # study pannel
-    path('study_pannel/<int:id>/', study_pannel, name='study_pannel'),
+    path('study_pannel/<int:course_id>/', study_pannel, name='study_pannel'),
     path('watch_video/<int:id>/', watch_video, name='watch_video'),
 
 
@@ -35,5 +35,8 @@ urlpatterns = [
          update_course_pdf, name='update_course_pdf'),
     path('delete_course_pdf/<int:id>/',
          delete_course_pdf, name='delete_course_pdf'),
+
+    # making pdf download able from client side
+    path('download_pdf/<int:pdf_id>/', download_pdf, name='download_pdf'),
 
 ]
