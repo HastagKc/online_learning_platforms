@@ -52,8 +52,12 @@
         <hr class="horizontal light mt-0 mb-2">
         <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul class="navbar-nav">
+
+
+                {% if request.user.is_teacher %}
                 <li class="nav-item">
-                    <a class="nav-link text-white active bg-gradient-primary" href="{% url 'dashboard' %}">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/dashboard/'%} active bg-gradient-primary {% endif %}"
+                        href="{% url 'dashboard' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">dashboard</i>
                         </div>
@@ -61,7 +65,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{% url 'courses_dashboard' %}">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/courses_dashboard/'%} active bg-gradient-primary {% endif %}"
+                        href="{% url 'courses_dashboard' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">table_view</i>
                         </div>
@@ -70,7 +75,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{% url 'notifications' %}">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/notifications/'%} 
+                    active bg-gradient-primary
+                    {% endif %}" href="{% url 'notifications' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">notifications</i>
                         </div>
@@ -82,29 +89,56 @@
                     </h6>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{% url 'profile' %}">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/profile/'%}     
+                    active bg-gradient-primary
+                    {% endif %}" href="{% url 'profile' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <span class="nav-link-text ms-1">Profile</span>
                     </a>
                 </li>
+
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/student_dashboard/'  %} active  bg-gradient-primary {% endif %}"
+                        href="{% url 'student_dashboard' %} ">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">dashboard</i>
+                        </div>
+                        <span class="nav-link-text ms-1">My Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/student_profile/'  %} active  bg-gradient-primary {% endif %} "
+                        href="{% url 'student_profile' %}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">person</i>
+                        </div>
+                        <span class="nav-link-text ms-1">My Profile</span>
+                    </a>
+                </li>
+
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link text-white " href="{% url 'log_in' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">login</i>
+                            <i class="material-icons opacity-10">assignment</i>
                         </div>
+
                         <span class="nav-link-text ms-1">Sign In</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white " href="{% url 'log_out' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">assignment</i>
+                            <i class="material-icons opacity-10">login</i>
                         </div>
                         <span class="nav-link-text ms-1">Logout</span>
                     </a>
                 </li>
+
             </ul>
         </div>
 

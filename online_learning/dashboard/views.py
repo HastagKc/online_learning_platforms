@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from online_learning_app.models import Course, Category
-from .models import TeacherProfile
+from .models import TeacherProfile, StudentProfile
 from accounts.models import CustomUserModel
 
 # Create your views here.
@@ -95,3 +95,56 @@ def courses_dashboard(request):
     }
 
     return render(request, 'dashboard/teacher/courses.html', context=context)
+
+
+# student dashboard
+def student_dashboard(request):
+    return render(request, 'dashboard/student/stu_dashboard.html')
+
+# student profile
+
+
+def student_profile(request):
+    return render(request, 'dashboard/student/stu_profile.html')
+
+
+def student_update_profile(request, id):
+    student_id = get_object_or_404(CustomUserModel, id=id)
+
+    if request.method == 'POST':
+        stu_profile_img = request.FILES.get('profile_image')
+        stu_age = request.POST.get('age')
+        stu_address = request.POST.get('address')
+        stu_phone_number = request.POST.get('phone_number')
+        stu_goal = request.POST.get('goal')
+        stu_bio = request.POST.get('bio')
+
+        errors = []
+        if not stu_phone_number.isdigit() or len(stu_phone_number) < 10:
+            errors.append(
+                "Phone number must contain only digits and be at least 10 digits long")
+        if not errors:
+            try:
+                # Get or create the teacher profile linked to the current user
+                student_profile, created = StudentProfile.objects.get_or_create(
+                    user=request.user
+                )
+                # Update the profile with new data
+                student_profile.profile_img = stu_profile_img
+                student_profile.age = stu_age
+                student_profile.address = stu_address
+                student_profile.phone_number = stu_phone_number
+                student_profile.goals = stu_goal
+                student_profile.bio = stu_bio
+                student_profile.save()
+                return redirect('student_profile')
+            except ValidationError as e:
+                errors.append(str(e))
+        else:
+            for error in errors:
+                print(error)
+    context = {
+        'student_id': student_id,
+    }
+
+    return render(request, 'dashboard/student/update_stu_profile.html', context=context)

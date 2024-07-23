@@ -1,8 +1,6 @@
-from .models import Course, Video
-from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
 from .models import Course, Category, Video, PDF
+from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
 
 from django.contrib.auth.decorators import login_required
 # for redirect into same page
@@ -219,8 +217,9 @@ def add_course_pdf(request):
     if request.method == 'POST':
         form = PDFForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('dashboard')
+            pdf = form.save()
+            course_id = pdf.course.id
+            return redirect('course_details', id=course_id)
     else:
         form = PDFForm()
     return render(request, 'online_learning_app/pdf/add_course_pdf.html', {'form': form})
