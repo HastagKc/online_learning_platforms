@@ -13,7 +13,7 @@ class TeacherProfile(models.Model):
     )
     profile_img = models.ImageField(upload_to='profile_img')
     bio = models.TextField()
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(default=0)
     address = models.CharField(max_length=200)
     phone_number = models.CharField(
         max_length=12,
@@ -33,8 +33,9 @@ class StudentProfile(models.Model):
     )
     profile_img = models.ImageField(upload_to='profile_img')
     bio = models.TextField()
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(default=0)
     address = models.CharField(max_length=200)
+    goals = models.CharField(max_length=200, default='')
     phone_number = models.CharField(
         max_length=12,
         validators=[
@@ -44,4 +45,3 @@ class StudentProfile(models.Model):
             ),
         ],
     )
-    goals = models.CharField(max_length=200),

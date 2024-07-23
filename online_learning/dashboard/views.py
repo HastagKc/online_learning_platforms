@@ -1,3 +1,4 @@
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
@@ -6,13 +7,14 @@ from django.contrib.auth.decorators import login_required
 from online_learning_app.models import Course, Category
 from .models import TeacherProfile, StudentProfile
 from accounts.models import CustomUserModel
+from .decorators import user_is_student, user_is_teacher
 
 # Create your views here.
 
 # dashboard
 
 
-@login_required(login_url='/accounts/log_in/')
+@user_is_teacher
 def dashboard(request):
     courses = Course.objects.all()
     context = {
@@ -23,7 +25,7 @@ def dashboard(request):
 # notifications
 
 
-@login_required(login_url='/accounts/log_in/')
+@user_is_teacher
 def notifications(request):
     return render(request, 'dashboard/teacher/notifications.html')
 
@@ -31,7 +33,7 @@ def notifications(request):
 # profile
 
 
-@login_required(login_url='/accounts/log_in/')
+@user_is_teacher
 def teacher_profile(request):
     return render(request, 'dashboard/teacher/profile.html')
 
@@ -39,7 +41,7 @@ def teacher_profile(request):
 # Update Teacher Profile
 
 
-@login_required(login_url='/accounts/log_in/')
+@user_is_teacher
 def update_teacher_profile(request, id):
     teacher = get_object_or_404(CustomUserModel, id=id)
     if request.method == 'POST':
@@ -54,7 +56,8 @@ def update_teacher_profile(request, id):
         # Validation
         if not phone_number.isdigit() or len(phone_number) < 10:
             errors.append(
-                "Phone number must contain only digits and be at least 10 digits long")
+                "Phone number must contain only digits and be at least 10 digits long"
+            )
 
         if not errors:
             try:
@@ -85,7 +88,7 @@ def update_teacher_profile(request, id):
 # tables
 
 
-@login_required(login_url='dashboard/accounts/log_in/')
+@user_is_teacher
 def courses_dashboard(request):
     courses = Course.objects.all()
     category = Category.objects.all()
@@ -98,18 +101,24 @@ def courses_dashboard(request):
 
 
 # student dashboard
+@user_is_student
 def student_dashboard(request):
     return render(request, 'dashboard/student/stu_dashboard.html')
 
 # student profile
 
 
+@user_is_student
 def student_profile(request):
     return render(request, 'dashboard/student/stu_profile.html')
 
+# update student profile
 
+
+@user_is_student
 def student_update_profile(request, id):
     student_id = get_object_or_404(CustomUserModel, id=id)
+    errors = []
 
     if request.method == 'POST':
         stu_profile_img = request.FILES.get('profile_image')
@@ -119,18 +128,26 @@ def student_update_profile(request, id):
         stu_goal = request.POST.get('goal')
         stu_bio = request.POST.get('bio')
 
-        errors = []
+        # Check if age is provided and is a valid integer
+        try:
+            stu_age = int(stu_age)
+        except (TypeError, ValueError):
+            errors.append("Age must be a valid number.")
+
+        # Validate phone number
         if not stu_phone_number.isdigit() or len(stu_phone_number) < 10:
             errors.append(
-                "Phone number must contain only digits and be at least 10 digits long")
+                "Phone number must contain only digits and be at least 10 digits long.")
+
         if not errors:
             try:
-                # Get or create the teacher profile linked to the current user
+                # Get or create the student profile linked to the current user
                 student_profile, created = StudentProfile.objects.get_or_create(
                     user=request.user
                 )
                 # Update the profile with new data
-                student_profile.profile_img = stu_profile_img
+                if stu_profile_img:
+                    student_profile.profile_img = stu_profile_img
                 student_profile.age = stu_age
                 student_profile.address = stu_address
                 student_profile.phone_number = stu_phone_number
@@ -140,11 +157,10 @@ def student_update_profile(request, id):
                 return redirect('student_profile')
             except ValidationError as e:
                 errors.append(str(e))
-        else:
-            for error in errors:
-                print(error)
+
     context = {
         'student_id': student_id,
+        'errors': errors
     }
 
     return render(request, 'dashboard/student/update_stu_profile.html', context=context)

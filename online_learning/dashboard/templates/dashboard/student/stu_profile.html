@@ -42,26 +42,32 @@
 
                 <!-- Body  -->
                 <div class="col-12">
-                    <p class="mb-0 font-weight-normal text-xl pt-4 pb-4">
+                    <p class="mb-0 font-weight-normal text-xl pt-2 pb-2">
                         {{ request.user.student_profile.bio }}
                     </p>
                 </div>
-
                 <div class="col-12">
-                    <p class="mb-0 font-weight-normal text-xl pt-4 pb-4">
-                        Goal: {{ request.user.student_profile.goals }}
+                    <p class="mb-0 font-weight-normal text-xl ">
+                        <span style="font-weight: bolder;">Age</span>:
+                        {{ request.user.student_profile.age }}
+
                     </p>
                 </div>
 
+                <div class="col-12">
+                    <p class="mb-0 font-weight-normal text-xl pt-2 pb-2">
+                    <h6>Goal:</h6> {{ request.user.student_profile.goals }}
+                    </p>
+                </div>
 
                 <div class="col-12">
-                    <p class="mb-0 font-weight-normal text-sm">
+                    <p class="mb-0 font-weight-normal text-sm pt-2 pb-2">
                     <h6>Address:</h6> {{ request.user.student_profile.address }}
                     </p>
                 </div>
 
                 <div class="col-12">
-                    <p class="mb-0 font-weight-normal text-sm">
+                    <p class="mb-0 font-weight-normal text-sm pt-2 pb-2">
                     <h6>Phone No:</h6> {{ request.user.student_profile.phone_number }}
                     </p>
                 </div>
