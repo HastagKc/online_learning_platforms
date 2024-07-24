@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card text-white bg-primary mb-3 mt-4" style="width: 100%;">
+                <div class="card-header">
+                    <h4 class="text-center">Total items: {{ items|length }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if items %}
+                    {% for item in items %}
+                    <div class="row mt-2">
+
+                        <!-- image -->
+                        <div class="col-2">
+                            <img src="{{ item.course.course_image.url }}" alt="No image"
+                                style="width: 50px; height: 50px; border-radius: 10px;">
+                        </div>
+
+                        <!-- title  -->
+                        <div class="col-4">
+
+                            <div class="row">
+                                <div class="col">
+                                    <p>{{ item.course.course_title }}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <p>By: {{ item.course.created_by }}</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- price -->
+                        <div class="col-2">
+                            {{ item.course.price }}
+
+                        </div>
+
+                        <!-- status -->
+                        <div class="col-4 pt-2 d-flex justify-content-end align-items-center">
+                            <a href="" class="btn btn-success">By with Khalti </a>
+
+                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger mx-2">Remove</a>
+
+
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                    {% else %}
+
+                    <p>Your cart is empty</p>
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
