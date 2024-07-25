@@ -1,75 +1,62 @@
+<!-- templates/cart/view_cart.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
-            <div class="card text-white bg-primary mb-3 mt-4" style="width: 100%;">
-                <div class="card-header">
-                    <h4 class="text-center">Total items: {{ items|length }}</h4>
-                </div>
-                <div class="card-body">
-                    {% if items %}
+        <div class="col mt-4">
+            <p class="text-center fs-3 fw-bold">
+                Total number of Cart Items: {{ items|length }}
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Cart ID</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for item in items %}
-                    <div class="row mt-2">
+                    <tr>
+                        <th scope="row">{{ item.id }}</th>
+                        <td>{{ item.course.course_title }}</td>
+                        <td>{{ item.course.price }}</td>
+                        <td>
+                            {% if item.is_paid %}
+                            <p>Paid</p>
+                            {% else %}
+                            Not Paid
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.is_paid %}
+                            <a href="#" type="submit" class="btn btn-success disabled" style="width: 100%;">Pay
+                                with
+                                Khalti</a>
 
-                        <!-- image -->
-                        <div class="col-2">
-                            <img src="{{ item.course.course_image.url }}" alt="No image"
-                                style="width: 50px; height: 50px; border-radius: 10px;">
-                        </div>
-
-                        <!-- title  -->
-                        <div class="col-4">
-
-                            <div class="row">
-                                <div class="col">
-                                    <p>{{ item.course.course_title }}</p>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col">
-                                    <p>By: {{ item.course.created_by }}</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- price -->
-                        <div class="col-2">
-                            {{ item.course.price }}
-
-                        </div>
-
-                        <!-- status -->
-                        <div class="col-4 pt-2 d-flex justify-content-end align-items-center">
-                            <a href="" class="btn btn-success">By with Khalti </a>
-
-                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger mx-2">Remove</a>
+                            {% else %}
+                            <a href="#" type="submit" class="btn btn-success" style="width: 100%;">Pay with
+                                Khalti</a>
+                            {% endif %}
 
 
-                        </div>
-                    </div>
 
+
+                            <a href="{% url 'remove_from_cart' item.id %}" style="width: 100%;"
+                                class="btn btn-danger mt-2">Remove</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">Your cart is empty.</td>
+                    </tr>
                     {% endfor %}
-
-                    {% else %}
-
-                    <p>Your cart is empty</p>
-                    {% endif %}
-
-                </div>
-            </div>
-
-
-
-
-
-
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
-
 {% endblock content %}
