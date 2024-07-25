@@ -20,6 +20,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(
         Cart, on_delete=models.CASCADE, related_name='items')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    is_paid = models.BooleanField(default=False)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

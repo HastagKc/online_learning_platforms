@@ -11,5 +11,5 @@ urlpatterns = [
 
     #  payment
     path('init_khalti/<int:id>/', init_khalti, name='init_khalti'),
-    # path('verify/', verify_khalti, name='verify_khalti'),
+    path('verify/', verify_khalti, name='verify_khalti'),
 ]

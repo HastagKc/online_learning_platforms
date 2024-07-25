@@ -70,37 +70,41 @@ def payement_form(request, cartItem_id):
 @login_required
 @csrf_exempt
 def init_khalti(request, id):
-    cartItem = get_object_or_404(CartItem, id=id)
+    cart_item = get_object_or_404(CartItem, id=id)
     url = "https://a.khalti.com/api/v2/epayment/initiate/"
     return_url = 'http://127.0.0.1:8000/cart/verify/'
     website_url = 'http://127.0.0.1:8000/cart/verify/'
-    amount = cartItem.course.price
+
+    amount = cart_item.course.price
     transaction_id = str(uuid.uuid4())
-    purchase_order_name = cartItem.course.course_title
-    user = cartItem.cart.user
+    purchase_order_name = cart_item.course.course_title
+    user = request.user
+    email = user.email
+    username = user.username
+    phone = "9813000000"  # Replace with actual user phone number if available
 
     payload = json.dumps({
         "return_url": return_url,
         "website_url": website_url,
         "amount": amount,
-        "purchase_order_id": cartItem.id,
+        "purchase_order_id": cart_item.id,
         "purchase_order_name": purchase_order_name,
         "transaction_id": transaction_id,
         "customer_info": {
-            "name": user.username,
-            "email": user.email,
-            "phone": "9800000010",  # Ideally, retrieve the actual phone number
+            "name": username,
+            "email": email,
+            "phone": phone,
         },
         "product_details": [
             {
-                "identity": cartItem.id,
+                "identity": cart_item.id,
                 "name": purchase_order_name,
                 "unit_price": amount,
                 "total_price": amount,
                 "quantity": 1
             }
         ],
-        "merchant_username": user.username,
+        "merchant_username": username,
     })
 
     headers = {
@@ -115,3 +119,54 @@ def init_khalti(request, id):
         return redirect(new_res['payment_url'])
     else:
         return JsonResponse({'error': 'Failed to initiate payment', 'details': new_res}, status=400)
+
+
+# what to do after payment
+
+
+@csrf_exempt
+def verify_khalti(request):
+    url = "https://a.khalti.com/api/v2/epayment/lookup/"
+
+    if request.method == 'GET':
+        headers = {
+            'Authorization': f'Key 4af23dc17ef244338b43239b43a3d8e1',
+            'Content-Type': 'application/json',
+        }
+
+        pidx = request.GET.get('pidx')
+        transaction_id = request.GET.get('transaction_id')
+        purchase_order_id = request.GET.get('purchase_order_id')
+
+        if not all([pidx, transaction_id, purchase_order_id]):
+            return JsonResponse({'error': 'Missing required parameters'}, status=400)
+
+        data = json.dumps({'pidx': pidx})
+
+        try:
+            res = requests.post(url, headers=headers, data=data)
+            res.raise_for_status()
+            new_res = res.json()
+        except requests.RequestException as e:
+            return JsonResponse({'error': 'Request to Khalti failed', 'details': str(e)}, status=500)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Failed to parse Khalti response'}, status=500)
+
+        if new_res.get('status') == 'Completed':
+            cart_item = get_object_or_404(CartItem, id=purchase_order_id)
+            cart_item.is_paid = True
+            cart_item.save()
+
+            # Payment.objects.create(
+            #     student=request.user.username,
+            #     payment_id=transaction_id,
+            #     amount=new_res.get('total_amount', 0),
+            #     cartItem=cart_item.id,
+            #     payment_status=new_res['status']
+            # )
+
+            return redirect('home')
+        else:
+            return JsonResponse({'error': 'Payment verification failed', 'details': new_res}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
