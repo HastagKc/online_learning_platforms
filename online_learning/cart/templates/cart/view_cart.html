@@ -38,12 +38,10 @@
                                 Khalti</a>
 
                             {% else %}
-                            <a href="#" type="submit" class="btn btn-success" style="width: 100%;">Pay with
+                            <a href="{% url 'payement_form' item.id %}" type="submit" class="btn btn-success"
+                                style="width: 100%;">Pay with
                                 Khalti</a>
                             {% endif %}
-
-
-
 
                             <a href="{% url 'remove_from_cart' item.id %}" style="width: 100%;"
                                 class="btn btn-danger mt-2">Remove</a>

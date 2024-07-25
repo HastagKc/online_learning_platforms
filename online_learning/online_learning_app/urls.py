@@ -34,7 +34,7 @@ urlpatterns = [
     path('update_course_pdf/<int:id>/',
          update_course_pdf, name='update_course_pdf'),
     path('delete_course_pdf/<int:id>/',
-         delete_course_pdf, name='delete_course_pdf'),
+         delete_course_pdf, name='delete_course_pdf'), 
 
     # making pdf download able from client side
     path('download_pdf/<int:pdf_id>/', download_pdf, name='download_pdf'),

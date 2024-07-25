@@ -28,10 +28,9 @@
                 style="background-color: purple; width: 100%; color: white;">Watch Your Course </a>
 
               {% else %}
-              <form action="{% url 'add_to_cart' course.id %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-primary mt-2" type="submit" style="width: 100%;">Add to Cart</button>
-              </form>
+
+              <a href="{% url 'add_to_cart' course.id %}" class="btn btn-primary mt-2" style="width: 100%;">Add to
+                Cart</a>
               <a href="#" class="btn btn-primary mt-2" style="width: 100%;">Buy now</a>
               {% endif %}
             </div>

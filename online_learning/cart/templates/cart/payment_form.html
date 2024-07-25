@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4 mb-4">
+    <form action="{% url 'init_khalti' cartItem.id %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-8">
+
+                <div>
+                    <label for="purchase_order_name" class="form-label mt-4">Purchase Order Name</label>
+                    <input type="text" class="form-control" id="purchase_order_name" name="purchase_order_name" disabled
+                        value="{{ course }}">
+                </div>
+                <div>
+                    <label for="course_price" class="form-label mt-4">Course Price</label>
+                    <input type="text" class="form-control" id="course_price" name="course_price" value="{{ amount }}">
+                </div>
+                <div>
+                    <label for="username" class="form-label mt-4">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ user }}">
+                </div>
+
+
+
+            </div>
+
+            <div class="col-4">
+                <button class="btn btn-primary mt-4" type="submit">Submit</button>
+                <center>
+                    <a href="#">
+                        <h4>Pay with Khalti</h4>
+                        <img src=" {% static 'images/khalti_logo.png' %}" alt="Khalti logo"
+                            style="width: 60%; height: 40%;">
+                    </a>
+                </center>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+{% endblock content %}
