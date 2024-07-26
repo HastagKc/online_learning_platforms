@@ -76,8 +76,8 @@
 
                 <li class="nav-item">
                     <a class="nav-link text-white {% if request.path == '/dashboard/notifications/'%} 
-                    active bg-gradient-primary
-                    {% endif %}" href="{% url 'notifications' %}">
+                            active bg-gradient-primary
+                            {% endif %}" href="{% url 'notifications' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">notifications</i>
                         </div>
@@ -90,8 +90,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white {% if request.path == '/dashboard/profile/'%}     
-                    active bg-gradient-primary
-                    {% endif %}" href="{% url 'profile' %}">
+                            active bg-gradient-primary
+                            {% endif %}" href="{% url 'profile' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">person</i>
                         </div>
@@ -117,6 +117,16 @@
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <span class="nav-link-text ms-1">My Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white {% if request.path == '/dashboard/enrollment/'  %} active  bg-gradient-primary {% endif %} "
+                        href="{% url 'enrollment' %}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">person</i>
+                        </div>
+                        <span class="nav-link-text ms-1">My Learning</span>
                     </a>
                 </li>
 

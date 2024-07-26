@@ -6,8 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import CartItem
-from django.shortcuts import get_object_or_404, redirect
+from .models import CartItem, Cart, Payment, Enrollment
 
 
 @login_required
@@ -157,13 +156,22 @@ def verify_khalti(request):
             cart_item.is_paid = True
             cart_item.save()
 
-            # Payment.objects.create(
-            #     student=request.user.username,
-            #     payment_id=transaction_id,
-            #     amount=new_res.get('total_amount', 0),
-            #     cartItem=cart_item.id,
-            #     payment_status=new_res['status']
-            # )
+            payment = Payment.objects.create(
+                student=request.user,
+                payment_id=transaction_id,
+                # Convert from paisa to currency unit
+                amount=new_res.get('total_amount', 0) / 100.0,
+                cart_item=cart_item,
+                paid_at=new_res.get('created_on', '2023-01-01T00:00:00Z'),
+                course=cart_item.course,
+                payment_status=new_res['status'],
+            )
+
+            Enrollment.objects.create(
+                payment=payment,
+                course=cart_item.course,
+                is_enroll=True
+            )
 
             return redirect('home')
         else:

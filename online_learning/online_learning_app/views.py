@@ -1,7 +1,6 @@
 from .models import PDF  # Make sure to import your PDF model
 from django.http import FileResponse, Http404
 from .models import PDF
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Course, Category, Video, PDF
@@ -10,6 +9,8 @@ from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
 from django.contrib.auth.decorators import login_required
 # for redirect into same page
 from django.http import HttpResponseRedirect
+
+from .decorators import user_is_enrolled
 # --------------------------------- Online learning app --------------------------------------
 
 
@@ -233,6 +234,7 @@ def delete_course_pdf(request, id):
 # content access page
 
 @login_required(login_url='/accounts/log_in/')
+@user_is_enrolled
 def study_pannel(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     related_videos = course.videos.all()  # Accessing related videos

@@ -9,6 +9,8 @@ from .models import TeacherProfile, StudentProfile
 from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
 
+from cart.models import *
+
 # Create your views here.
 
 # dashboard
@@ -164,3 +166,13 @@ def student_update_profile(request, id):
     }
 
     return render(request, 'dashboard/student/update_stu_profile.html', context=context)
+
+
+@user_is_student
+def enrollment_page(request):
+    enroll_courses = Enrollment.objects.all()
+
+    context = {
+        'enroll_courses': enroll_courses,
+    }
+    return render(request, 'dashboard/student/enroll_course.html', context=context)

@@ -1,5 +1,6 @@
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
 
 
 def user_is_teacher(function):
@@ -8,7 +9,8 @@ def user_is_teacher(function):
         if hasattr(request.user, 'teacherprofile'):
             return function(request, *args, **kwargs)
         else:
-            raise PermissionDenied
+            # Redirect to the index page if the user is not a teacher
+            return redirect('index')
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap
@@ -20,7 +22,8 @@ def user_is_student(function):
         if hasattr(request.user, 'student_profile'):
             return function(request, *args, **kwargs)
         else:
-            raise PermissionDenied
+            # Redirect to the index page if the user is not a student
+            return redirect('index')
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap
