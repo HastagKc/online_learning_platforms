@@ -218,27 +218,30 @@ teacher dashboard
                       </div>
                     </td>
                     <td>
+
+
                       <div class="avatar-group mt-2">
+
+
+
+
+                        {% for enroll in enroll_students %}
+
+
+                        {% if course.id == enroll.course.id %}
+
                         <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
                           data-bs-placement="bottom" title="Ryan Tompson">
                           <img src="/static/assets/img/team-1.jpg" alt="team1">
                         </a>
-                        <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                          data-bs-placement="bottom" title="Romina Hadid">
-                          <img src="/static/assets/img/team-2.jpg" alt="team2">
-                        </a>
-                        <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                          data-bs-placement="bottom" title="Alexander Smith">
-                          <img src="/static/assets/img/team-3.jpg" alt="team3">
-                        </a>
-                        <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                          data-bs-placement="bottom" title="Jessica Doe">
-                          <img src="/static/assets/img/team-4.jpg" alt="team4">
-                        </a>
-                      </div>
-                    </td>
+                        <p>{{ enroll.payment.student|truncatechars:2 }}</p>
 
-                    <!-- price -->
+                        {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- price -->
                     <td class="align-middle text-center text-sm">
                       <span class="text-xs font-weight-bold"> $ {{ course.price }} </span>
                     </td>

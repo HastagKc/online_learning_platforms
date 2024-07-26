@@ -8,6 +8,7 @@ from online_learning_app.models import Course, Category
 from .models import TeacherProfile, StudentProfile
 from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
+from cart.models import Enrollment
 
 from cart.models import *
 
@@ -19,8 +20,10 @@ from cart.models import *
 @user_is_teacher
 def dashboard(request):
     courses = Course.objects.all()
+    enroll_students = Enrollment.objects.all()
     context = {
         'courses': courses,
+        'enroll_students': enroll_students
     }
     return render(request, 'dashboard/teacher/dashboard.html', context=context)
 

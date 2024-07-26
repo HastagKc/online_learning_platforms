@@ -2,7 +2,7 @@ from functools import wraps
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
 from cart.models import Course, Enrollment
-
+from accounts.models import CustomUserModel
 
 
 def user_is_enrolled(view_func):
@@ -15,8 +15,11 @@ def user_is_enrolled(view_func):
         is_enrolled = Enrollment.objects.filter(
             payment__student=request.user, course=course, is_enroll=True).exists()
 
-        if not is_enrolled:
-            return HttpResponseForbidden("You are not enrolled in this course.")
+        # Check if the user is the teacher of the course
+        is_teacher = course.created_by == request.user.username
+
+        if not is_enrolled and not is_teacher:
+            return HttpResponseForbidden("You are not enrolled in this course and are not the teacher.")
 
         return view_func(request, *args, **kwargs)
 
