@@ -27,12 +27,16 @@
               <a href="{% url 'study_pannel' course.id %}" class="btn"
                 style="background-color: purple; width: 100%; color: white;">Watch Your Course </a>
 
-              {% else %}
+              {% elif request.user.username == enrollment.payment.student.username %}
+              <a href="{% url 'study_pannel' course.id %}" class="btn"
+                style="background-color: purple; width: 100%; color: white;">Watch Your Course </a>
 
+              {% else %}
               <a href="{% url 'add_to_cart' course.id %}" class="btn btn-primary mt-2" style="width: 100%;">Add to
                 Cart</a>
               <a href="#" class="btn btn-primary mt-2" style="width: 100%;">Buy now</a>
               {% endif %}
+
             </div>
           </div>
         </div>

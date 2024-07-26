@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from .decorators import user_is_enrolled
+from cart.models import Enrollment
 # --------------------------------- Online learning app --------------------------------------
 
 
@@ -27,8 +28,16 @@ def home(request):
 @login_required(login_url='/accounts/log_in/')
 def details_page(request, id):
     course = get_object_or_404(Course, id=id)
+    # Try to get the enrollment for the logged-in user
+    try:
+        enrollment = Enrollment.objects.get(
+            course=course, payment__student=request.user)
+    except Enrollment.DoesNotExist:
+        enrollment = None
+
     context = {
         'course': course,
+        'enrollment': enrollment
     }
     return render(request, 'online_learning_app/details_page.html', context=context)
 
