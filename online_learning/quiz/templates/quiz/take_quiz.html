@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+<!-- main contain -->
+
+
+{% block content %}
+<div class="container">
+
+    {% for question in questions %}
+    <div class="row">
+        <div class="col">
+            <div class="card border-primary mb-3 mt-4 mb-4" style="width:100%;">
+                <div class="card-header">
+                    <h5>
+                        {{ question.question_text }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ questions.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

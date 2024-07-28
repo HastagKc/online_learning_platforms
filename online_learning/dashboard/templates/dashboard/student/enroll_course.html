@@ -29,6 +29,10 @@
                                 </th>
                                 <th
                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Take Quiz
+                                </th>
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Enrollment Date
                                 </th>
                             </tr>
@@ -68,6 +72,15 @@
                                 <!-- price -->
                                 <td class="align-middle text-center text-sm">
                                     <span class="text-xs font-weight-bold"> {{ enroll.payment.student.username }}
+                                    </span>
+                                </td>
+
+                                <!-- quiz -->
+                                <td class="align-middle text-center text-sm">
+                                    <span class="text-xs font-weight-bold">
+                                        <a href="{% url 'showQuiz' enroll.course.id %}">
+                                            Take quiz
+                                        </a>
                                     </span>
                                 </td>
 
