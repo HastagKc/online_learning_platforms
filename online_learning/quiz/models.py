@@ -41,7 +41,8 @@ class Answer(models.Model):
 
 class Options(models.Model):
     question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name='options')
+        Question, on_delete=models.CASCADE, related_name='options'
+    )
     options = models.CharField(max_length=200, default='')
 
     def __str__(self):
@@ -53,8 +54,7 @@ class StudentProgress(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     selected_option = models.ForeignKey(
-        Options, on_delete=models.CASCADE, null=True
-    )
+        Options, on_delete=models.CASCADE, null=True)
     is_correct = models.BooleanField(default=False)
     attempted_at = models.DateTimeField(default=timezone.now)
 
