@@ -50,9 +50,16 @@ class Options(models.Model):
 
 
 class StudentProgress(models.Model):
-    student = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        CustomUserModel, on_delete=models.CASCADE,
+        related_name='student'
+    )
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE,
+        related_name='quiz'
+    )
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name='question')
     selected_option = models.ForeignKey(
         Options, on_delete=models.CASCADE, null=True)
     is_correct = models.BooleanField(default=False)

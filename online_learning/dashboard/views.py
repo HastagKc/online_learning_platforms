@@ -1,8 +1,6 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect, get_object_or_404
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 
 from online_learning_app.models import Course, Category
 from .models import TeacherProfile, StudentProfile
@@ -10,7 +8,9 @@ from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
 from cart.models import Enrollment
 
+from quiz.models import Quiz, StudentProgress
 from cart.models import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -179,3 +179,18 @@ def enrollment_page(request):
         'enroll_courses': enroll_courses,
     }
     return render(request, 'dashboard/student/enroll_course.html', context=context)
+
+
+# progress
+
+@login_required
+def progress_view(request):
+    user = request.user
+    progress_data = StudentProgress.objects.filter(
+        user=user).select_related('question')
+
+    context = {
+        'progress_data': progress_data,
+    }
+
+    return render(request, 'your_template.html', context)
