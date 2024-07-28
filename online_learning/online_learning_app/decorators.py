@@ -2,7 +2,6 @@ from functools import wraps
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
 from cart.models import Course, Enrollment
-from accounts.models import CustomUserModel
 
 
 def user_is_enrolled(view_func):
