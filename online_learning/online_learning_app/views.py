@@ -1,6 +1,3 @@
-
-
-from .models import Quiz, Question, Options, StudentProgress
 from django.shortcuts import render, get_object_or_404, redirect
 from django.shortcuts import render, get_object_or_404
 from .models import PDF  # Make sure to import your PDF model
@@ -300,57 +297,3 @@ def download_pdf(request, pdf_id):
     except IOError:
         # Handle file not found or any IO errors
         raise Http404("PDF file not found.")
-
-
-# quiz
-
-def showQuiz(request, quiz_id):
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    questions = quiz.questions.all()
-    student = request.user  # Assuming CustomUserModel is the user model
-
-    if request.method == 'POST':
-        correct_count = 0
-        total_questions = questions.count()
-
-        for question in questions:
-            selected_option_id = request.POST.get(f'question_{question.id}')
-            if selected_option_id:
-                selected_option = get_object_or_404(
-                    Options, id=selected_option_id
-                )
-                print(selected_option)
-                is_correct = Answer.objects.filter(
-                    question=question,
-                    answer_text=selected_option.options
-
-                ).exists()
-                if is_correct:
-                    correct_count += 1
-                StudentProgress.objects.create(
-                    student=student,
-                    quiz=quiz,
-                    question=question,
-                    selected_option=selected_option,
-                    is_correct=is_correct
-                )
-
-        score = int((correct_count / total_questions) * 100)
-        return redirect('quiz_results', quiz_id=quiz.id, score=score)
-
-    context = {'quiz': quiz, 'questions': questions}
-    return render(request, 'online_learning_app/quiz/quiz.html', context)
-
-
-@login_required
-def quiz_results(request, quiz_id, score):
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    student = request.user
-    progress = StudentProgress.objects.filter(student=student, quiz=quiz)
-
-    context = {
-        'quiz': quiz,
-        'score': score,
-        'progress': progress,
-    }
-    return render(request, 'online_learning_app/quiz/results.html', context)
