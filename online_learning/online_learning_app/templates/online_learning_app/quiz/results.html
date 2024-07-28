@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-4">
+    <h1>{{ quiz.title }} - Results</h1>
+    <p>Your Score: {{ score }}%</p>
+    <h3>Question Breakdown</h3>
+    <ul>
+        {% for entry in progress %}
+        <li>
+            <strong>{{ entry.question.question_text }}</strong><br>
+            Your Answer: {{ entry.selected_option.options }} -
+            {% if entry.is_correct %}
+            Correct
+            {% else %}
+            Incorrect
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

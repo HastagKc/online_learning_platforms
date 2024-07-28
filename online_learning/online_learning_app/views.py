@@ -1,10 +1,15 @@
+
+
+from .models import Quiz, Question, Options, StudentProgress
+from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import PDF  # Make sure to import your PDF model
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 from .models import PDF
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Course, Category, Video, PDF
-from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
+from .models import *
+from .forms import *
 
 from django.contrib.auth.decorators import login_required
 # for redirect into same page
@@ -246,16 +251,22 @@ def delete_course_pdf(request, id):
 @user_is_enrolled
 def study_pannel(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    related_videos = course.videos.all()  # Accessing related videos
-    # Handling case when there are no videos
+    course_quizzes = course.quizzes.all()
+    course_quiz = course_quizzes.first() if course_quizzes.exists() else None
+
+    if not course_quiz:
+        return HttpResponse("No Quiz is uploaded")
+
+    related_videos = course.videos.all()
     first_video = related_videos[0] if related_videos else None
-    # fetching pdf content related to course
-    pdf = PDF.objects.filter(course=course_id)
+    pdfs = course.pdfs.all()
+
     context = {
         'course': course,
         'related_videos': related_videos,
         'video': first_video,
-        'pdf': pdf,
+        'pdf': pdfs,
+        'course_quiz': course_quiz,
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
 
@@ -289,3 +300,57 @@ def download_pdf(request, pdf_id):
     except IOError:
         # Handle file not found or any IO errors
         raise Http404("PDF file not found.")
+
+
+# quiz
+
+def showQuiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    questions = quiz.questions.all()
+    student = request.user  # Assuming CustomUserModel is the user model
+
+    if request.method == 'POST':
+        correct_count = 0
+        total_questions = questions.count()
+
+        for question in questions:
+            selected_option_id = request.POST.get(f'question_{question.id}')
+            if selected_option_id:
+                selected_option = get_object_or_404(
+                    Options, id=selected_option_id
+                )
+                print(selected_option)
+                is_correct = Answer.objects.filter(
+                    question=question,
+                    answer_text=selected_option.options
+
+                ).exists()
+                if is_correct:
+                    correct_count += 1
+                StudentProgress.objects.create(
+                    student=student,
+                    quiz=quiz,
+                    question=question,
+                    selected_option=selected_option,
+                    is_correct=is_correct
+                )
+
+        score = int((correct_count / total_questions) * 100)
+        return redirect('quiz_results', quiz_id=quiz.id, score=score)
+
+    context = {'quiz': quiz, 'questions': questions}
+    return render(request, 'online_learning_app/quiz/quiz.html', context)
+
+
+@login_required
+def quiz_results(request, quiz_id, score):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    student = request.user
+    progress = StudentProgress.objects.filter(student=student, quiz=quiz)
+
+    context = {
+        'quiz': quiz,
+        'score': score,
+        'progress': progress,
+    }
+    return render(request, 'online_learning_app/quiz/results.html', context)
