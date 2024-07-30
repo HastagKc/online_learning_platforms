@@ -174,6 +174,8 @@ def student_update_profile(request, id):
 @user_is_student
 def enrollment_page(request):
     enroll_courses = Enrollment.objects.all()
+    for enroll in enroll_courses:
+        print(enroll)
 
     context = {
         'enroll_courses': enroll_courses,

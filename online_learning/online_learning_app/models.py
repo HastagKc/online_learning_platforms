@@ -31,7 +31,8 @@ class Course(models.Model):
 
 class PDF(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='pdfs')
+        Course, on_delete=models.CASCADE, related_name='pdfs'
+    )
     pdf_file = models.FileField(upload_to='course_pdfs/')
     title = models.CharField(max_length=200)
     pdf_des = models.CharField(max_length=200, default='')

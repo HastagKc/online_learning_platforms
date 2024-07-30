@@ -47,7 +47,8 @@ class Payment(models.Model):
 # enrollment model
 class Enrollment(models.Model):
     payment = models.ForeignKey(
-        Payment, on_delete=models.CASCADE, related_name='enrollments')
+        Payment, on_delete=models.CASCADE, related_name='enrollments'
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     enroll_at = models.DateTimeField(auto_now_add=True)
     is_enroll = models.BooleanField(default=False)
