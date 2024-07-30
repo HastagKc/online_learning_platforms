@@ -47,6 +47,7 @@ EXTERNAL_APPS = [
     'accounts',
     'dashboard',
     'cart',
+    'quiz',
 
 ]
 
