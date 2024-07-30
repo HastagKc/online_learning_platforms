@@ -8,7 +8,7 @@ from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
 from cart.models import Enrollment
 
-from quiz.models import Quiz, StudentProgress
+
 from cart.models import *
 from django.contrib.auth.decorators import login_required
 
@@ -108,6 +108,7 @@ def courses_dashboard(request):
 # student dashboard
 @user_is_student
 def student_dashboard(request):
+
     return render(request, 'dashboard/student/stu_dashboard.html')
 
 # student profile
@@ -181,18 +182,3 @@ def enrollment_page(request):
         'enroll_courses': enroll_courses,
     }
     return render(request, 'dashboard/student/enroll_course.html', context=context)
-
-
-# progress
-
-@login_required
-def progress_view(request):
-    user = request.user
-    progress_data = StudentProgress.objects.filter(
-        user=user).select_related('question')
-
-    context = {
-        'progress_data': progress_data,
-    }
-
-    return render(request, 'your_template.html', context)
