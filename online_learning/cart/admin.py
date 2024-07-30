@@ -21,8 +21,8 @@ class CartItemAdmin(admin.ModelAdmin):
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'cart_item', 'amount',
-        'payment_id', 'student', 'paid_at', 'course'
+        'id', 'course', 'amount',
+        'payment_id', 'student', 'paid_at',
     ]
 
 # Enrollment Admin

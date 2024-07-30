@@ -161,7 +161,6 @@ def verify_khalti(request):
                 payment_id=transaction_id,
                 # Convert from paisa to currency unit
                 amount=new_res.get('total_amount', 0) / 100.0,
-                cart_item=cart_item,
                 paid_at=new_res.get('created_on', '2023-01-01T00:00:00Z'),
                 course=cart_item.course,
                 payment_status=new_res['status'],

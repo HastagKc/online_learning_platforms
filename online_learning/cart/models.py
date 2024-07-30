@@ -32,9 +32,6 @@ class Payment(models.Model):
         CustomUserModel, on_delete=models.CASCADE, related_name='payments')
     payment_id = models.CharField(max_length=200)
     amount = models.FloatField()
-
-    cart_item = models.ForeignKey(
-        CartItem, on_delete=models.CASCADE, related_name='payments')
     payment_status = models.CharField(max_length=200, default='')
     # Add this field to link payment to course
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
