@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="container-fluid bg-secondary">
+<div class="container-fluid bg-secondary py-4">
 
     {% for quiz in quizes %}
     <div class="row">
@@ -20,7 +20,7 @@
                         {{ quiz.quiz_desc }}
                     </p>
 
-                    <a href="" class="btn btn-success">Go To Quiz</a>
+                    <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-success">Go To Quiz</a>
                 </div>
             </div>
         </div>

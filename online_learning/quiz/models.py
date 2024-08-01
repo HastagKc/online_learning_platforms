@@ -34,10 +34,10 @@ class Options(models.Model):
     question = models.ForeignKey(
         Question, related_name='options', on_delete=models.CASCADE
     )
-    options = models.CharField(max_length=200)
+    option_text = models.CharField(max_length=200)
 
     def __str__(self):
-        return f'{self.question} - {self.options}'
+        return f'{self.question} - {self.option_text}'
 
 
 # answer model

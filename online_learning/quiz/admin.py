@@ -16,7 +16,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(Options)
 class OptionsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'question', 'options']
+    list_display = ['id', 'question', 'option_text']
 
 
 @admin.register(Answer)
