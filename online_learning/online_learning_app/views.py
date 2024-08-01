@@ -248,11 +248,6 @@ def delete_course_pdf(request, id):
 @user_is_enrolled
 def study_pannel(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    course_quizzes = course.quizzes.all()
-    course_quiz = course_quizzes.first() if course_quizzes.exists() else None
-
-    if not course_quiz:
-        return HttpResponse("No Quiz is uploaded")
 
     related_videos = course.videos.all()
     first_video = related_videos[0] if related_videos else None
@@ -263,7 +258,7 @@ def study_pannel(request, course_id):
         'related_videos': related_videos,
         'video': first_video,
         'pdf': pdfs,
-        'course_quiz': course_quiz,
+
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
 
