@@ -1,5 +1,4 @@
 from django.db import models
-
 # Category
 
 
@@ -32,7 +31,8 @@ class Course(models.Model):
 
 class PDF(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='pdfs')
+        Course, on_delete=models.CASCADE, related_name='pdfs'
+    )
     pdf_file = models.FileField(upload_to='course_pdfs/')
     title = models.CharField(max_length=200)
     pdf_des = models.CharField(max_length=200, default='')
@@ -51,38 +51,3 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
-
-# Quize Model
-
-
-class Quiz(models.Model):
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='quizzes')
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.title
-
-# Question Model
-
-
-class Question(models.Model):
-    quiz = models.ForeignKey(
-        Quiz, on_delete=models.CASCADE, related_name='questions')
-    question_text = models.TextField()
-
-    def __str__(self):
-        return self.question_text
-
-# Answer
-
-
-class Answer(models.Model):
-    question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name='answers')
-    answer_text = models.TextField()
-    is_correct = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.answer_text

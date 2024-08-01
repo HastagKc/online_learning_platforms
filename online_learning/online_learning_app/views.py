@@ -1,10 +1,12 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import PDF  # Make sure to import your PDF model
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 from .models import PDF
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Course, Category, Video, PDF
-from .forms import CourseForm, CategoryForm, VideoForm, PDFForm
+from .models import *
+from .forms import *
 
 from django.contrib.auth.decorators import login_required
 # for redirect into same page
@@ -246,16 +248,17 @@ def delete_course_pdf(request, id):
 @user_is_enrolled
 def study_pannel(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    related_videos = course.videos.all()  # Accessing related videos
-    # Handling case when there are no videos
+
+    related_videos = course.videos.all()
     first_video = related_videos[0] if related_videos else None
-    # fetching pdf content related to course
-    pdf = PDF.objects.filter(course=course_id)
+    pdfs = course.pdfs.all()
+
     context = {
         'course': course,
         'related_videos': related_videos,
         'video': first_video,
-        'pdf': pdf,
+        'pdf': pdfs,
+
     }
     return render(request, 'online_learning_app/study_pannel.html', context=context)
 

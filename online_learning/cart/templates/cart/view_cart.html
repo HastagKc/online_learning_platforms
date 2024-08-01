@@ -19,7 +19,15 @@
                     </tr>
                 </thead>
                 <tbody>
+
+
+                    {% if items %}
+
+
+
                     {% for item in items %}
+
+
                     <tr>
                         <th scope="row">{{ item.id }}</th>
                         <td>{{ item.course.course_title }}</td>
@@ -47,11 +55,14 @@
                                 class="btn btn-danger mt-2">Remove</a>
                         </td>
                     </tr>
-                    {% empty %}
+
+                    {% endfor %}
+
+                    {% else %}
                     <tr>
                         <td colspan="5" class="text-center">Your cart is empty.</td>
                     </tr>
-                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

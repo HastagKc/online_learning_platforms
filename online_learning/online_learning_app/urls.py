@@ -39,4 +39,5 @@ urlpatterns = [
     # making pdf download able from client side
     path('download_pdf/<int:pdf_id>/', download_pdf, name='download_pdf'),
 
+
 ]

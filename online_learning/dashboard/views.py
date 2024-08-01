@@ -1,8 +1,6 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect, get_object_or_404
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 
 from online_learning_app.models import Course, Category
 from .models import TeacherProfile, StudentProfile
@@ -10,7 +8,9 @@ from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
 from cart.models import Enrollment
 
+
 from cart.models import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -108,6 +108,7 @@ def courses_dashboard(request):
 # student dashboard
 @user_is_student
 def student_dashboard(request):
+
     return render(request, 'dashboard/student/stu_dashboard.html')
 
 # student profile
@@ -174,6 +175,8 @@ def student_update_profile(request, id):
 @user_is_student
 def enrollment_page(request):
     enroll_courses = Enrollment.objects.all()
+    for enroll in enroll_courses:
+        print(enroll)
 
     context = {
         'enroll_courses': enroll_courses,

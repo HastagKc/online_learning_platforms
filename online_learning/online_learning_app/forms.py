@@ -1,6 +1,6 @@
 from .models import Video, Course
 from django import forms
-from .models import Category, Course, PDF, Video, Quiz, Question, Answer
+from .models import Category, Course, PDF, Video
 
 
 class CategoryForm(forms.ModelForm):
@@ -37,20 +37,4 @@ class PDFForm(forms.ModelForm):
         model = PDF
         fields = ['course', 'pdf_file', 'title', 'pdf_des']
 
-
-class QuizForm(forms.ModelForm):
-    class Meta:
-        model = Quiz
-        fields = ['course', 'title', 'description']
-
-
-class QuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = ['quiz', 'question_text']
-
-
-class AnswerForm(forms.ModelForm):
-    class Meta:
-        model = Answer
-        fields = ['question', 'answer_text', 'is_correct']
+# quiz
