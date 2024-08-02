@@ -48,7 +48,6 @@ class Answer(models.Model):
         Question, related_name='answer', on_delete=models.CASCADE
     )
     answer = models.CharField(max_length=200)
-    is_correct = models.BooleanField(default=False)
 
     def __str__(self):
         return self.answer
@@ -62,14 +61,14 @@ class UserQuizProgress(models.Model):
     completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.user.username} - {self.quiz.title} - {self.score}'
+        return f'{self.user.username} - {self.quiz.quiz_title} - {self.score}'
 
 
 class UserAnswer(models.Model):
     user = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete= models.CASCADE)
+    answer = models.ForeignKey(Options, on_delete=models.CASCADE)
     is_correct = models.BooleanField()
 
     def __str__(self):
-        return f'{self.user.username} - {self.question.text} - {self.answer.text} - {"Correct" if self.is_correct else "Incorrect"}'
+        return f'{self.user.username} - {self.question.question_text} - {self.answer.option_text} - {"Correct" if self.is_correct else "Incorrect"}'

@@ -21,7 +21,7 @@ class OptionsAdmin(admin.ModelAdmin):
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'question', 'answer', 'is_correct']
+    list_display = ['id', 'question', 'answer']
 
 
 @admin.register(UserQuizProgress)
