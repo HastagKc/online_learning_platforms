@@ -11,7 +11,7 @@
         <div class="card-body">
             <p>Completed by: <strong>{{ progress.user.username }}</strong></p>
             <p>Score: <strong>{{ progress.score }}</strong></p>
-            <p>Status: <strong>{{ 'Completed' if progress.completed else 'Not Completed' }}</strong></p>
+            <p>Status: <strong></strong></p>
 
             <a href="{% url 'take_quiz' quiz_id=progress.quiz.id %}" class="btn btn-primary">Take Quiz Again</a>
         </div>
