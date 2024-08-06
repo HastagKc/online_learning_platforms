@@ -4,7 +4,6 @@
 {% block content %}
 
 <div class="container py-4">
-
     <form action="" method="POST">
         {% csrf_token %}
         {% for question in questions %}
@@ -19,7 +18,6 @@
                             value="{{ option.id }}">
                         <label for="option_{{ option.id }}">{{ option.option_text }}</label> <br>
                         {% endfor %}
-
                     </div>
                 </div>
             </div>

@@ -31,7 +31,9 @@
 
 <body>
   <!-- Navigation bar start -->
-  <nav class="navbar navbar-expand-lg bg-dark pt-4 pb-4" data-bs-theme="dark">
+  <nav
+    class="navbar navbar-expand-lg {% if request.user.is_teacher%} bg-dark  {% else %} bg-primary {% endif %} pt-4 pb-4"
+    data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">Online Learning</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
