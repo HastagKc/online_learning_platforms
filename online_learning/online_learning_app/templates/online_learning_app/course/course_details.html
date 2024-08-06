@@ -130,9 +130,34 @@
 
   <!-- question container -->
 
-  <div class="row">
-    <div class="col">
-      Add Quiz
+  <div class="card mt-4 mb-4">
+    <div class="row">
+      <div class="col-12">
+        <h2><a href="{% url 'quiz:add_quiz' course_quiz_id.id %}" class="btn btn-primary mb-2">Add Quiz</a> </h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Quiz Title</th>
+              <th>Quiz Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for quiz in coures_quiz %}
+            <tr>
+              <td>{{ quiz.id }}</td>
+              <td>{{ quiz.quiz_title }}</td>
+              <td>{{ quiz.quiz_desc|truncatewords:10 }}</td>
+              <td>
+                <a href="#" class="btn btn-primary m-2">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

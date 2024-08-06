@@ -41,8 +41,6 @@ class Options(models.Model):
 
 
 # answer model
-
-
 class Answer(models.Model):
     question = models.ForeignKey(
         Question, related_name='answer', on_delete=models.CASCADE
@@ -64,6 +62,7 @@ class UserQuizProgress(models.Model):
         return f'{self.user.username} - {self.quiz.quiz_title} - {self.score}'
 
 
+# answer Model
 class UserAnswer(models.Model):
     user = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

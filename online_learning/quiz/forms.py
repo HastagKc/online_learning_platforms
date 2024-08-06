@@ -5,9 +5,8 @@ from .models import Quiz, Question, Options, Answer, UserQuizProgress, UserAnswe
 class QuizForm(forms.ModelForm):
     class Meta:
         model = Quiz
-        fields = ['course', 'quiz_title', 'quiz_desc']
+        fields = ['quiz_title', 'quiz_desc']
         widgets = {
-            'course': forms.Select(attrs={'class': 'form-control'}),
             'quiz_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Quiz Title'}),
             'quiz_desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Quiz Description'}),
         }

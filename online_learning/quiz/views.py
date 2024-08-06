@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Quiz, Question, Options, Answer, UserQuizProgress, UserAnswer
 from django.contrib.auth.decorators import login_required
 
+from online_learning_app.models import Course
+from quiz.models import *
+from quiz.forms import *
 from online_learning_app.models import Course
 
 # Display quizzes related to a specific course
@@ -84,3 +86,22 @@ def quiz_results(request, quiz_id):
         'progress': progress,
     }
     return render(request, 'quiz/quiz_results.html', context)
+
+
+# quiz
+
+@login_required
+def add_quiz(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    if request.method == 'POST':
+        pass
+
+    else:
+        form = QuizForm()
+
+    context = {
+        'form': form,
+        'course': course,
+    }
+    return render(request, 'quiz/add_quiz.html', context=context)
