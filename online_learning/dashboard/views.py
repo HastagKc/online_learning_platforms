@@ -10,7 +10,7 @@ from cart.models import Enrollment
 
 
 from cart.models import *
-from quiz.models import UserQuizProgress
+
 
 # Create your views here.
 
@@ -108,14 +108,7 @@ def courses_dashboard(request):
 # student dashboard
 @user_is_student
 def student_dashboard(request):
-
-    student_progress = UserQuizProgress.objects.filter(
-        user=request.user).last()
-    context = {
-        'student_progress': student_progress,
-    }
-
-    return render(request, 'dashboard/student/stu_dashboard.html', context=context)
+    return render(request, 'dashboard/student/stu_dashboard.html')
 
 # student profile
 
