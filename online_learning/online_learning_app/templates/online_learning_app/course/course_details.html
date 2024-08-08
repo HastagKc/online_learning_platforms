@@ -150,8 +150,9 @@
               <td>{{ quiz.title }}</td>
               <td>{{ quiz.description|truncatewords:10 }}</td>
               <td>
-                <a href="#" class="btn btn-primary m-2">Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
+                <a href="{% url 'create_question' quiz.id %}" class="btn btn-outline-info m-2">Add Content</a>
+                <a href="{% url 'update_quiz' quiz.id %}" class="btn btn-outline-primary m-2">Edit</a>
+                <a href="{% url 'detele_quiz' quiz.id %}" class="btn btn-outline-danger">Delete</a>
               </td>
             </tr>
             {% endfor %}

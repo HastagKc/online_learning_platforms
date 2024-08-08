@@ -1,12 +1,9 @@
-from .models import Question
-from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
-from .models import Quiz, Question, Option, Answer
-from .models import Quiz, Question
-from .forms import QuestionForm, OptionFormSet, AnswerForm
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseRedirect
+from .models import Quiz, Question, Option
 from .forms import QuestionForm, OptionFormSet, AnswerForm, QuizForm
-from .models import Quiz, Question, Course, Option, Answer
+from online_learning_app.models import Course
+# quiz
 
 
 def create_quiz(request, course_id):
@@ -28,8 +25,34 @@ def create_quiz(request, course_id):
     return render(request, 'quiz/create_quiz.html', context=context)
 
 
-def create_question(request, quiz_id):
+def update_quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
+    if request.method == 'POST':
+        form = QuizForm(request.POST, instance=quiz)
+        if form.is_valid():
+            form.save()
+            return redirect('course_details', id=quiz.course.id)
+
+    else:
+        form = QuizForm(instance=quiz)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'quiz/create_quiz.html', context=context)
+
+
+def detele_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    quiz.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+# questions
+
+
+def create_question(request, quiz_id):
+    # Fetching data
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    questions = Question.objects.filter(quiz=quiz).prefetch_related('options')
 
     if request.method == 'POST':
         question_form = QuestionForm(request.POST)
@@ -67,6 +90,7 @@ def create_question(request, quiz_id):
         'question_form': question_form,
         'option_formset': option_formset,
         'answer_form': answer_form,
+        'questions': questions,
     }
 
     return render(request, 'quiz/create_question.html', context)
@@ -79,17 +103,13 @@ def update_question(request, quiz_id, question_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
     question = get_object_or_404(Question, id=question_id)
 
-    # Initialize forms with the existing question data
-    question_form = QuestionForm(instance=question)
-    option_formset = OptionFormSet(
-        queryset=Option.objects.filter(question=question))
-    answer_form = AnswerForm(instance=question.correct_answer)
-
     if request.method == 'POST':
+        # Process form data
         question_form = QuestionForm(request.POST, instance=question)
-        option_formset = OptionFormSet(request.POST, instance=question)
+        option_formset = OptionFormSet(
+            request.POST, queryset=Option.objects.filter(question=question))
         answer_form = AnswerForm(
-            request.POST, instance=question.correct_answer)
+            request.POST, instance=question.correct_answer if question.correct_answer else None)
 
         if question_form.is_valid() and option_formset.is_valid() and answer_form.is_valid():
             # Save the updated question
@@ -102,13 +122,22 @@ def update_question(request, quiz_id, question_id):
                 option.save()
 
             # Save the updated answer
-            if answer_form.cleaned_data['answer_text']:
+            if answer_form.cleaned_data.get('answer_text'):
                 answer = answer_form.save(commit=False)
                 answer.question = question
                 answer.save()
 
-            # Redirect to the quiz detail page or another page after updating the question
-            return redirect('home')  # Update with the appropriate redirect URL
+            # Redirect to a page that shows the updated quiz or question details
+            # Adjust redirect as needed
+            return redirect('create_question', quiz_id=quiz.id)
+
+    else:
+        # Initialize forms for GET request
+        question_form = QuestionForm(instance=question)
+        option_formset = OptionFormSet(
+            queryset=Option.objects.filter(question=question))
+        answer_form = AnswerForm(
+            instance=question.correct_answer if question.correct_answer else None)
 
     context = {
         'quiz': quiz,
@@ -117,7 +146,7 @@ def update_question(request, quiz_id, question_id):
         'answer_form': answer_form,
     }
 
-    return render(request, 'quiz/create_or_update_question.html', context)
+    return render(request, 'quiz/update_question.html', context)
 
 
 # delete
@@ -125,14 +154,6 @@ def update_question(request, quiz_id, question_id):
 
 def delete_question(request, quiz_id, question_id):
     question = get_object_or_404(Question, id=question_id, quiz_id=quiz_id)
-
-    if request.method == 'POST':
-        # Delete the question
-        question.delete()
-        # Show a success message
-        messages.success(request, 'Question deleted successfully.')
-        # Redirect to the quiz detail page or another relevant page
-        return redirect('home')  # Update with the appropriate redirect URL
-
-    # Render a confirmation template (optional)
-    return render(request, 'quiz/confirm_delete.html', {'question': question})
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    question.delete()
+    return redirect('create_question', quiz_id=quiz.id)
