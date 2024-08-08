@@ -7,7 +7,7 @@ from online_learning_app.models import Course
 
 
 class Quiz(models.Model):
-    course_title = models.ForeignKey(
+    course = models.ForeignKey(
         Course, related_name='quizes', on_delete=models.CASCADE
     )
     title = models.CharField(max_length=255)
@@ -51,7 +51,6 @@ class Option(models.Model):
         Question, related_name='options', on_delete=models.CASCADE
     )
     option_text = models.CharField(max_length=255)
-    is_correct = models.BooleanField(default=False)
 
     def __str__(self):
         return self.option_text

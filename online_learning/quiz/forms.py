@@ -1,35 +1,44 @@
-from django.forms import inlineformset_factory
 from django import forms
-from .models import Quiz, Question, Answer, Option
+from django.forms import modelformset_factory
+from .models import Quiz, Question, Option, Answer
 
 
 class QuizForm(forms.ModelForm):
     class Meta:
         model = Quiz
-        fields = ['course_title', 'title', 'description']
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter quiz title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter quiz description'}),
+        }
 
 
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['quiz', 'question_text']
+        fields = ['question_text']
+        widgets = {
+            'question_text': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter the question text'}),
+        }
+
+
+OptionFormSet = modelformset_factory(
+    Option,
+    fields=('option_text',),
+    extra=4,
+    min_num=4,
+    max_num=4,
+    validate_min=True,
+    widgets={
+        'option_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter option text'}),
+    }
+)
 
 
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ['question', 'answer_text']
-
-
-class OptionForm(forms.ModelForm):
-    class Meta:
-        model = Option
-        fields = ['question', 'option_text', 'is_correct']
-
-
-OptionFormSet = inlineformset_factory(
-    Question,
-    Option,
-    form=OptionForm,
-    extra=4  # Number of forms to display
-)
+        fields = ['answer_text']
+        widgets = {
+            'answer_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the correct answer'}),
+        }

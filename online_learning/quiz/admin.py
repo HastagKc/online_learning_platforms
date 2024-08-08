@@ -20,7 +20,7 @@ class AnswerInline(admin.TabularInline):
 
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ['id', 'course_title', 'title',
+    list_display = ['id', 'course', 'title',
                     'description', 'created_at', 'updated_at'
                     ]
 
