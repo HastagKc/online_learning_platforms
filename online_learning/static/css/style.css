@@ -11,3 +11,12 @@ a {
 .checked {
     color: gold;
 }
+
+
+
+/* form container */
+
+.form__container {
+    width: 65%;
+
+}

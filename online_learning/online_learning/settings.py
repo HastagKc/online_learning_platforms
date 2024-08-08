@@ -47,8 +47,6 @@ EXTERNAL_APPS = [
     'accounts',
     'dashboard',
     'cart',
-    'quiz',
-
 ]
 
 INSTALLED_APPS.extend(EXTERNAL_APPS)

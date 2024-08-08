@@ -10,7 +10,7 @@ from cart.models import Enrollment
 
 
 from cart.models import *
-from django.contrib.auth.decorators import login_required
+from quiz.models import UserQuizProgress
 
 # Create your views here.
 
@@ -109,7 +109,13 @@ def courses_dashboard(request):
 @user_is_student
 def student_dashboard(request):
 
-    return render(request, 'dashboard/student/stu_dashboard.html')
+    student_progress = UserQuizProgress.objects.filter(
+        user=request.user).last()
+    context = {
+        'student_progress': student_progress,
+    }
+
+    return render(request, 'dashboard/student/stu_dashboard.html', context=context)
 
 # student profile
 

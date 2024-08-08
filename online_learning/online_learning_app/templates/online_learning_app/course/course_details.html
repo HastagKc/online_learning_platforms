@@ -52,182 +52,112 @@
 <!-- For Additional Content -->
 <div class="container-fluid">
   <!-- video -->
-  <div class="row">
-    <div class="col">
-      <a href="{% url 'add_video' %}" style="text-decoration: none;" class="btn btn-primary">Add Video</a>
+
+  <div class="card mt-4">
+    <div class="row">
+      <div class="col">
+        <a href="{% url 'add_video' %}" style="text-decoration: none;" class="btn btn-primary">Add Video</a>
+      </div>
+      <div class="col-12 mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Course</th>
+              <th scope="col">Title</th>
+              <th scope="col">Video file</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for video in course_videos %}
+            <tr>
+              <th scope="row">{{ video.id }}</th>
+              <td>{{ video.course }}</td>
+              <td>{{ video.title }}</td>
+              <td>{{ video.video_file }}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'update_video' video.id %}">Update</a>
+                <a class="btn btn-danger mt-2" href="{% url 'delete_video' video.id %}">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="col-12 mt-3">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Course</th>
-            <th scope="col">Title</th>
-            <th scope="col">Video file</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for video in course_videos %}
-          <tr>
-            <th scope="row">{{ video.id }}</th>
-            <td>{{ video.course }}</td>
-            <td>{{ video.title }}</td>
-            <td>{{ video.video_file }}</td>
-            <td>
-              <a class="btn btn-primary" href="{% url 'update_video' video.id %}">Update</a>
-              <a class="btn btn-danger mt-2" href="{% url 'delete_video' video.id %}">Delete</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+
   </div>
 
 
 
   <!-- Course Pdf Files -->
+  <div class="card mt-4">
+    <div class="row">
+      <div class="col-12">
+        <h2><a href="{% url 'add_course_pdf' %}" class="btn btn-primary mb-2">Add Course Pdf</a> </h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Pdf Title</th>
+              <th scope="col">Pdf Description</th>
+              <th scope="col">Pdf Files</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
 
-  <div class="row">
-    <div class="col-12">
-      <h2><a href="{% url 'add_course_pdf' %}" class="btn btn-primary">Add Course Pdf</a> </h2>
-    </div>
-  </div>
-  <div class="row">
+            {% for pdf in course_pdf %}
+            <tr>
+              <td>{{ pdf.id }}</td>
+              <td>{{ pdf.title }}</td>
+              <td>{{ pdf.pdf_file }}</td>
+              <td>{{ pdf.pdf_des|truncatewords:10 }}</td>
+              <td>
+                <a href="{% url 'update_course_pdf' pdf.id %}" class="btn btn-primary m-2">Edit</a>
+                <a href="{% url 'delete_course_pdf' pdf.id %}" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
 
-    <div class="col-12">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Pdf Title</th>
-            <th scope="col">Pdf Description</th>
-            <th scope="col">Pdf Files</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          {% for pdf in course_pdf %}
-          <tr>
-            <td>{{ pdf.id }}</td>
-            <td>{{ pdf.title }}</td>
-            <td>{{ pdf.pdf_file }}</td>
-            <td>{{ pdf.pdf_des|truncatewords:10 }}</td>
-            <td>
-              <a href="{% url 'update_course_pdf' pdf.id %}" class="btn btn-primary">Edit</a>
-              <a href="{% url 'delete_course_pdf' pdf.id %}" class="btn btn-danger">Delete</a>
-            </td>
-          </tr>
-          {% endfor %}
-
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- question -->
-  <div class="row">
-    <div class="col-4">
-      <h2>Add Video</h2>
-    </div>
-    <div class="col-8">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Course</th>
-            <th scope="col">Title</th>
-            <th scope="col">Video file</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 
-  <!-- add answer -->
-  <div class="row">
-    <div class="col-4">
-      <h2>Add Video</h2>
-    </div>
-    <div class="col-8">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Course</th>
-            <th scope="col">Title</th>
-            <th scope="col">Video file</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>
-              <button class="btn btn-primary">Edit</button>
-              <button class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- question container -->
+
+  <div class="card mt-4 mb-4">
+    <div class="row">
+      <div class="col-12">
+        <h2><a href="{% url 'quiz:add_quiz' course_quiz_id.id %}" class="btn btn-primary mb-2">Add Quiz</a> </h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Quiz Title</th>
+              <th>Quiz Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for quiz in coures_quiz %}
+            <tr>
+              <td>{{ quiz.id }}</td>
+              <td>{{ quiz.quiz_title }}</td>
+              <td>{{ quiz.quiz_desc|truncatewords:10 }}</td>
+              <td>
+                <a href="#" class="btn btn-primary m-2">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
