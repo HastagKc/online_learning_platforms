@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Quiz, Question, Answer, Option
+from .models import *
 # Register your models here.
 # Inline Admin for Option
 
@@ -51,3 +51,14 @@ class OptionAdmin(admin.ModelAdmin):
 
     question.admin_order_field = 'question__text'  # Allow sorting by question text
     question.short_description = 'Question'  # Column header name
+
+
+# student progress
+@admin.register(StudentProgress)
+class StudentProgressAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'quiz', 'question']
+
+
+# @admin.register(OverallProgress)
+# class OverallProgressAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'user', 'score']

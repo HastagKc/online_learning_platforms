@@ -1,5 +1,6 @@
 from django.db import models
 from online_learning_app.models import Course
+from accounts.models import CustomUserModel
 
 # Create your models here.
 
@@ -53,3 +54,38 @@ class Option(models.Model):
 
     def __str__(self):
         return self.option_text
+
+# student progress
+
+
+class StudentProgress(models.Model):
+    user = models.ForeignKey(
+        CustomUserModel, related_name='student_progresses', on_delete=models.CASCADE
+    )
+    quiz = models.ForeignKey(
+        Quiz, related_name='quiz', on_delete=models.CASCADE,
+        default=''
+    )
+    question = models.ForeignKey(
+        Question, related_name='attempt_questions', on_delete=models.CASCADE
+    )
+
+    class Meta:
+        unique_together = ('user', 'question')
+
+    def __str__(self):
+        return f'Username: {self.user}'
+
+
+class OverallProgress(models.Model):
+    user = models.ForeignKey(
+        CustomUserModel, related_name='overall_progress', on_delete=models.CASCADE
+    )
+    quiz = models.ForeignKey(
+        Quiz, related_name='quizes', on_delete=models.CASCADE
+    )
+    total_questions = models.PositiveIntegerField()
+    score = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'Username: {self.user} score: {self.score}'

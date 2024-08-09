@@ -23,5 +23,9 @@ urlpatterns = [
     path('show_quiz_question/<int:quiz_id>/',
          show_quiz_question, name='show_quiz_question'),
 
+    #     show result
+
+    path('show_result/', show_result, name='show_result'),
+
 
 ]

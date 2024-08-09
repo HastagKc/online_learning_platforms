@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
-from .models import Quiz, Question, Option
+from .models import *
 from .forms import QuestionForm, OptionFormSet, AnswerForm, QuizForm
 from online_learning_app.models import Course
 # quiz
@@ -183,8 +183,79 @@ def show_quiz_question(request, quiz_id):
             'options': options,
         })
 
+    # quiz
+    if request.method == 'POST':
+        score = 0
+        for question in questions:
+            selected_option_id = request.POST.get(f'question_{question.id}')
+            if selected_option_id:
+                try:
+                    selected_option = Option.objects.get(id=selected_option_id)
+                    is_correct = Answer.objects.filter(
+                        question=question, answer_text=selected_option.option_text).exists()
+                    if is_correct:
+                        if not StudentProgress.objects.filter(
+                            user=request.user, quiz=quiz, question=question
+                        ).exists():
+                            student_progress = StudentProgress(
+                                user=request.user, quiz=quiz, question=question
+                            )
+                            student_progress.save()
+                            score += 1
+                            print('correct')
+                            print(score)
+                        else:
+                            score += 1
+                            print('correct')
+                            print(score)
+
+                except Option.DoesNotExist:
+                    print(f'Option with ID {
+                        selected_option_id} does not exist.')
+        # Store the score and quiz ID in session
+        request.session['score'] = score
+        request.session['quiz_id'] = quiz_id
+        return redirect('show_result')
+
     context = {
         'quiz': quiz,
         'question_with_options': question_with_options,
     }
     return render(request, 'quiz/quiz_stu/show_quiz_questions.html', context=context)
+
+
+def show_result(request):
+    score = request.session.get('score', 0)
+    quiz_id = request.session.get('quiz_id')
+
+    # if not quiz_id:
+    #     return redirect('')  # Handle missing quiz_id appropriately
+
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    total_questions = quiz.questions.count()
+    incorrect_answers = total_questions - score
+    questions = Question.objects.filter(quiz=quiz)
+
+    # Create or update OverallProgress record
+    OverallProgress.objects.update_or_create(
+        user=request.user,
+        quiz=quiz,
+        defaults={
+            'total_questions': total_questions,
+            'score': score,
+        }
+    )
+
+    # Clean up session
+    request.session.pop('score', None)
+    request.session.pop('quiz_id', None)
+
+    context = {
+        'score': score,
+        'quiz': quiz,
+        'total_questions': total_questions,
+        'incorrect_answers': incorrect_answers,
+        'questions': questions,
+    }
+
+    return render(request, 'quiz/quiz_stu/result_quiz.html', context=context)
