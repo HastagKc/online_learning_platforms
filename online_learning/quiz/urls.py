@@ -18,4 +18,10 @@ urlpatterns = [
          delete_question, name='delete_question'),
 
 
+    # quiz for student
+    path('show_quiz/<int:course_id>/', show_quiz, name='show_quiz'),
+    path('show_quiz_question/<int:quiz_id>/',
+         show_quiz_question, name='show_quiz_question'),
+
+
 ]

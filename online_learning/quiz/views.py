@@ -73,8 +73,7 @@ def create_question(request, quiz_id):
             answer.question = question
             answer.save()
 
-            # Redirect to the quiz detail page after question creation
-            return redirect('home')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             print(question_form.errors)
             print(option_formset.errors)
@@ -157,3 +156,35 @@ def delete_question(request, quiz_id, question_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
     question.delete()
     return redirect('create_question', quiz_id=quiz.id)
+
+
+# quiz student
+
+def show_quiz(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    quizes = Quiz.objects.filter(course=course)
+    context = {
+        'course': course,
+        'quizes': quizes,
+    }
+    return render(request, 'quiz/quiz_stu/show_quiz.html', context=context)
+
+
+def show_quiz_question(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    questions = Question.objects.filter(quiz=quiz).prefetch_related('options')
+
+    # Organize options by their related questions
+    question_with_options = []
+    for question in questions:
+        options = question.options.all()
+        question_with_options.append({
+            'question': question,
+            'options': options,
+        })
+
+    context = {
+        'quiz': quiz,
+        'question_with_options': question_with_options,
+    }
+    return render(request, 'quiz/quiz_stu/show_quiz_questions.html', context=context)

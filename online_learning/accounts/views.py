@@ -121,7 +121,10 @@ def log_in(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            if user.is_teacher:
+                return redirect('dashboard')
+            else:
+                return redirect('home')
 
         else:
             messages.info(request, 'Invalid keyword')

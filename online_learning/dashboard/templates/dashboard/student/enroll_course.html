@@ -89,7 +89,7 @@
                                 <!-- quiz -->
                                 <td class="align-middle text-center text-sm">
                                     <span class="text-xs font-weight-bold">
-                                        <a href="#" class="btn btn-outline-dark">
+                                        <a href="{% url 'show_quiz' enroll.course.id %}" class="btn btn-outline-dark">
                                             Take quiz
                                         </a>
                                     </span>
@@ -100,11 +100,6 @@
                                     <a href="{% url 'study_pannel' enroll.course.id %}"
                                         class="btn btn-outline-dark">Watch</a>
                                 </td>
-
-
-
-
-
                             </tr>
                             {% endif %}
 
