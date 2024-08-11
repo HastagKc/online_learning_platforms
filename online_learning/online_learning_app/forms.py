@@ -17,17 +17,23 @@ class CategoryForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = [
-            'course_image', 'course_title',
-            'course_desc', 'category', 'price'
-        ]
+        fields = ['course_image', 'course_title',
+                  'course_desc', 'category', 'price']
         widgets = {
             'course_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
             'course_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Course Title'}),
             'course_desc': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Course Description'}),
-            'category': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Category'}),
+            # Ensure this is a Select widget for ForeignKey
+            'category': forms.Select(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Price'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['category'].queryset = Category.objects.filter(
+                created_by=user)
 
 
 class VideoForm(forms.ModelForm):
@@ -35,7 +41,7 @@ class VideoForm(forms.ModelForm):
         model = Video
         fields = ['course', 'video_file', 'title']
         widgets = {
-            'course': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Course Name'}),
+            'course': forms.Select(attrs={'class': 'form-control'}),
             'video_file': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Video Title'}),
         }
@@ -45,7 +51,7 @@ class VideoForm(forms.ModelForm):
         super(VideoForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['course'].queryset = Course.objects.filter(
-                created_by=user.username
+                created_by=user
             )
 
 
@@ -64,5 +70,3 @@ class PDFForm(forms.ModelForm):
                 'placeholder': 'Enter course description'
             }),
         }
-
-# quiz

@@ -56,7 +56,7 @@ def add_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             cate = form.save(commit=False)
-            cate.created_by = request.user.username
+            cate.created_by = request.user
             cate.save()
             return redirect('courses_dashboard')
     else:
@@ -103,7 +103,6 @@ def course_detail(request, id):
     course
     '''
     course = Course.objects.filter(id=id)
-
     specific_course = get_object_or_404(Course, id=id)
     course_videos = Video.objects.filter(course=specific_course)
     course_pdf = PDF.objects.filter(course=specific_course)
@@ -121,14 +120,11 @@ def course_detail(request, id):
 
 @login_required(login_url='/accounts/log_in/')
 def add_course(request):
-    '''
-    this view add new course
-    '''
     if request.method == 'POST':
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
-            course.created_by = request.user.username
+            course.created_by = request.user  # Assign the user instance
             course.save()
             return redirect('courses_dashboard')
     else:
@@ -169,7 +165,7 @@ def delete_course(request, id):
 @login_required(login_url='/accounts/log_in/')
 def add_video(request):
     if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES, user=request.user)
+        form = VideoForm(request.POST, request.FILES, user=request.user.id)
         if form.is_valid():
             video = form.save()
             # Assuming the video model has a ForeignKey to the course model

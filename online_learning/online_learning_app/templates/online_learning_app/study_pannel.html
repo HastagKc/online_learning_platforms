@@ -42,10 +42,11 @@
 </head>
 
 <body>
-  <!-- Navigation bar -->
+
+  <!-- nav start  -->
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand fs-4" href="{% url 'home' %}"> Online Learning</a>
+      <a class="navbar-brand" href="{% url 'home' %}">Online Learning</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
         aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -54,33 +55,30 @@
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link active" href="#">
-              Course
+              {{course.course_title}}
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'enrollment' %}">My Learning</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Progress</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Take Quiz</a>
-          </li>
-        </ul>
 
+          {% if not request.user.is_teacher %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'enrollment' %}">My Courses</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_profile' %}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_dashboard' %}">Progress</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Q&N</a>
+          </li>
+          {% endif %}
+        </ul>
       </div>
     </div>
   </nav>
-  <!-- navigation end -->
-  <div class="container-fluid bg-black">
-    <div class="row p-4 d-flex align-items-center">
-      <div class="col-6 text-white">
-        <p style="font-size: 24px;">{{course.course_title}}</p>
-      </div>
-    </div>
-  </div>
-
-
+  <!-- nav ends -->
   <div class="container-fluid mt-3">
     <div class="row">
       <div class="col-12 col-lg-8">
@@ -89,7 +87,7 @@
           <div class="col-12">
             <!-- video player -->
 
-            <video id="custom-video" width="100%" height="auto" controls autoplay>
+            <video id="custom-video" width="100%" controls autoplay>
 
               {% if video %}
               <source src="{{ video.video_file.url }}" type="video/mp4" />
@@ -102,8 +100,6 @@
             <!-- video end -->
           </div>
         </div>
-
-
 
         <div class="container-fluid mt-2">
           <div class="row">

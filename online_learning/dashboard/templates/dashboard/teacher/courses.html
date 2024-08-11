@@ -50,7 +50,7 @@ course
                 </thead>
                 <tbody>
                   {% for category in category %}
-                  {% if category.created_by == request.user.username %}
+                  {% if category.created_by == request.user %}
                   <tr>
                     <td style="padding: 20px;">{{ category.id }}</td>
                     <td>{{ category.cate_title }}</td>
@@ -106,7 +106,7 @@ course
 
                   {% for course in courses %}
 
-                  {% if course.created_by == request.user.username %}
+                  {% if course.created_by == request.user %}
                   <tr>
                     <td>
                       <div class="d-flex px-2">

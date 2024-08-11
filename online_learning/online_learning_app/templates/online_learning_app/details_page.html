@@ -22,7 +22,7 @@
               <h5 class="card-title">${{ course.price }}</h5>
 
 
-              {% if request.user.username == course.created_by %}
+              {% if request.user == course.created_by %}
 
               <a href="{% url 'study_pannel' course.id %}" class="btn"
                 style="background-color: purple; width: 100%; color: white;">Watch Your Course </a>

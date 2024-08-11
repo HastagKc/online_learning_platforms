@@ -15,7 +15,7 @@ def user_is_enrolled(view_func):
             payment__student=request.user, course=course, is_enroll=True).exists()
 
         # Check if the user is the teacher of the course
-        is_teacher = course.created_by == request.user.username
+        is_teacher = course.created_by == request.user
 
         if not is_enrolled and not is_teacher:
             return HttpResponseForbidden("You are not enrolled in this course and are not the teacher.")

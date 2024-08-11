@@ -109,29 +109,28 @@
 
     <div class="row">
 
-
       {% for course in courses %}
 
       <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
         <div class="z-1 position-absolute m-4">
           <span class="badge text-white bg-secondary">New</span>
         </div>
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
+        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative" style="min-height: 450px;">
           <a href="{% url 'details_page' course.id %}"><img src="{{ course.course_image.url }}"
-              class="img-fluid rounded-3" alt="image" style="height: 200px;"></a>
+              class="img-fluid rounded-3" alt="image"></a>
 
           <div class="card-body p-0">
 
             <div class="d-flex justify-content-between my-3">
               <a href="{% url 'details_page' course.id %}" class="text-black-50">
-                <p class="fw-bold text-uppercase m-0"> {{ course.course_title }}</p>
+                <p class="fw-bold text-uppercase m-0"> {{ course.course_title|truncatewords:2 }}</p>
               </a>
             </div>
 
             <p class="pb-1 text-black-50">{{ course.category }}</p>
 
             <a href="{% url 'details_page' course.id %}" class="text-black-50">
-              <p class="course-title m-0">{{ course.course_desc|truncatewords:8 }}</p>
+              <p class="course-title m-0">{{ course.course_desc|truncatewords:5 }}</p>
             </a>
 
             <div class="card-text">
@@ -152,215 +151,7 @@
         </div>
       </div>
       {% endfor %}
-
-
-
-
-      <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="z-1 position-absolute m-4">
-          <span class="badge text-white bg-secondary">Sale</span>
-        </div>
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-          <a href="courses-details.html"><img src="static/images/item8.jpg" class="img-fluid rounded-3" alt="image"
-              style="height: 200px;"></a>
-          <div class="card-body p-0">
-
-            <div class="d-flex justify-content-between my-3">
-              <p class="text-black-50 fw-bold text-uppercase m-0">CyberClass 101: A Guide to Online Education</p>
-            </div>
-
-            <a href="courses-details.html">
-
-              <p class="course-title  m-0"> Digital Marketing</p>
-              <p class="m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </a>
-
-            <div class="card-text">
-              <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">By: James Willam</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-              </span>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-
-      <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="z-1 position-absolute m-4">
-          <span class="badge text-white bg-secondary">Sale</span>
-        </div>
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-          <a href="courses-details.html"><img src="static/images/item8.jpg" class="img-fluid rounded-3" alt="image"
-              style="height: 200px;"></a>
-          <div class="card-body p-0">
-
-            <div class="d-flex justify-content-between my-3">
-              <p class="text-black-50 fw-bold text-uppercase m-0">CyberClass 101: A Guide to Online Education</p>
-            </div>
-
-            <a href="courses-details.html">
-
-              <p class="course-title  m-0"> Digital Marketing</p>
-              <p class="m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </a>
-
-            <div class="card-text">
-              <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">By: James Willam</p>
-                <p>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star"></span>
-                  <span class="fa fa-star"></span>
-                </p>
-              </span>
-            </div>
-
-          </div>
-        </div>
-      </div>
     </div>
-
-    <!-- card  -->
-
-    <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-      <div class="z-1 position-absolute m-4">
-        <span class="badge text-white bg-secondary">Sale</span>
-      </div>
-      <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-        <a href="courses-details.html"><img src="static/images/item8.jpg" class="img-fluid rounded-3" alt="image"
-            style="height: 200px;"></a>
-        <div class="card-body p-0">
-
-          <div class="d-flex justify-content-between my-3">
-            <p class="text-black-50 fw-bold text-uppercase m-0">CyberClass 101: A Guide to Online Education</p>
-          </div>
-
-          <a href="courses-details.html">
-
-            <p class="course-title  m-0"> Digital Marketing</p>
-            <p class="m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-          </a>
-
-          <div class="card-text">
-            <span class="rating d-flex align-items-center mt-3">
-              <p class="text-muted fw-semibold m-0 me-2">By: James Willam</p>
-              <p>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-              </p>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- card end  -->
-
-    <div class="text-center mt-4 d-flex justify-content-end">
-      <div>
-        <ul class="pagination">
-          <li class="page-item disabled">
-            <a class="page-link" href="#">&laquo;</a>
-          </li>
-          <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">3</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">4</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">5</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">&raquo;</a>
-          </li>
-        </ul>
-      </div>
-      <!-- <a href="courses.html" class="btn btn-primary px-5 py-3">View all courses</a> -->
-    </div>
-
-  </div>
 </section>
-<!-- about us  section 
-<section id="about" class="py-3 py-md-5 py-xl-8" style="padding: 20px;">
-  <div class="container-fluid">
-    <div class="row justify-content-md-center">
-      <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
-        <h2 class="mb-4 display-5 text-center">About Us</h2>
-        <p class="text-primary mb-5 text-center lead fs-5">Empowering Your Learning Journey
-          At Online Learning, our mission is to empower individuals to unlock their full potential through accessible
-          and high-quality education. We believe that learning should be a transformative experience, one that equips
-          you with the skills and knowledge needed to succeed in today's rapidly evolving world.</p>
-        <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
-      </div>
-    </div>
-  </div>
 
-  <div class="container-fluid">
-    <div class="row gy-4 gy-lg-0 align-items-lg-center">
-      <div class="col-12 col-lg-6">
-        <img class="img-fluid rounded border border-dark" loading="lazy" src="/static/static/images/about_section_img.png"
-          alt="About Us">
-      </div>
-      <div class="col-12 col-lg-6 col-xxl-6">
-        <div class="row justify-content-lg-end">
-          <div class="col-12 col-lg-11">
-            <div class="about-wrapper">
-              <h class="fs-3">Who We Are</h>
-              <p class="lead mb-4 mb-md-5 fs-6">
-                Founded by a team of passionate educators and tech enthusiasts, Online Learning is dedicated to
-                providing top-notch courses that cater to various interests and professional goals. Our platform brings
-                together industry experts, experienced instructors, and cutting-edge technology to deliver a learning
-                experience that is both engaging and effective.</p>
-              <div class="row gy-4 mb-2 mb-md-5">
-                <div class="col-12 col-md-6">
-                  <div class="card border border-dark">
-                    <div class="card-body p-4">
-                      <h3 class="display-5 fw-bold text-primary text-center mb-2">370+</h3>
-                      <p class="fw-bold text-center m-0">Qualified Expert Teacher</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6">
-                  <div class="card border border-dark">
-                    <div class="card-body p-4">
-                      <h3 class="display-5 fw-bold text-primary text-center mb-2">18k+</h3>
-                      <p class="fw-bold text-center m-0">Satisfied Student</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <a href="#!" class="btn btn-primary bsb-btn-2xl fs-6">
-                Explore
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor"
-                  class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
 {% endblock %}

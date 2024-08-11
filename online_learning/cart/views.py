@@ -64,8 +64,9 @@ def payement_form(request, cartItem_id):
 
     return render(request, 'cart/payment_form.html', context=context)
 
-
 # payment
+
+
 @login_required
 @csrf_exempt
 def init_khalti(request, id):
@@ -74,7 +75,7 @@ def init_khalti(request, id):
     return_url = 'http://127.0.0.1:8000/cart/verify/'
     website_url = 'http://127.0.0.1:8000/cart/verify/'
 
-    amount = cart_item.course.price
+    amount = int(cart_item.course.price) * 100
     transaction_id = str(uuid.uuid4())
     purchase_order_name = cart_item.course.course_title
     user = request.user
