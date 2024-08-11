@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 
 from .decorators import user_is_enrolled
 from cart.models import Enrollment
+from quiz.models import *
 
 # --------------------------------- Online learning app --------------------------------------
 
@@ -103,16 +104,17 @@ def course_detail(request, id):
     '''
     course = Course.objects.filter(id=id)
 
-    course_videos = Video.objects.filter(course=id)
-    course_pdf = PDF.objects.filter(course=id)
-
-    course_quiz_id = get_object_or_404(Course, id=id)
+    specific_course = get_object_or_404(Course, id=id)
+    course_videos = Video.objects.filter(course=specific_course)
+    course_pdf = PDF.objects.filter(course=specific_course)
+    course_quiz = Quiz.objects.filter(course=specific_course)
 
     context = {
         'course': course,
         'course_videos': course_videos,
         'course_pdf': course_pdf,
-        'course_quiz_id': course_quiz_id,
+        'course_quiz': course_quiz,
+        'specific_course': specific_course,
     }
     return render(request, 'online_learning_app/course/course_details.html', context=context)
 

@@ -7,6 +7,8 @@ from .models import TeacherProfile, StudentProfile
 from accounts.models import CustomUserModel
 from .decorators import user_is_student, user_is_teacher
 from cart.models import Enrollment
+from quiz.models import StudentProgress, OverallProgress
+from django.db.models import Sum
 
 
 from cart.models import *
@@ -108,8 +110,22 @@ def courses_dashboard(request):
 # student dashboard
 @user_is_student
 def student_dashboard(request):
-    return render(request, 'dashboard/student/stu_dashboard.html')
+    overall_progress = OverallProgress.objects.filter(user=request.user)
+    student_progress = StudentProgress.objects.filter(user=request.user)
 
+    # Aggregate the total score for the user
+    total_score = overall_progress.aggregate(total=Sum('score'))['total']
+    # Calculate the total number of questions across all quizzes the user has attempted
+    total_questions = overall_progress.aggregate(
+        total_questions=Sum('total_questions'))['total_questions']
+
+    context = {
+        'overall_progress': overall_progress,
+        'student_progress': student_progress,
+        'total_score': total_score,
+        'total_questions': total_questions,
+    }
+    return render(request, 'dashboard/student/stu_dashboard.html', context=context)
 # student profile
 
 
