@@ -122,8 +122,6 @@ def init_khalti(request, id):
 
 
 # what to do after payment
-
-
 @csrf_exempt
 def verify_khalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
